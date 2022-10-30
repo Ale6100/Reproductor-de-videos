@@ -9,6 +9,15 @@ img {
     width: 100%;
 }
 
+.noTerminado {
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    font-size: 0.75rem;
+    position: fixed;
+    left: 1vw;
+    top: 1vh;
+}
+
 .contenedor-video {
     height: 100vh;
     display: grid;
@@ -16,18 +25,6 @@ img {
     grid-template-rows: 1fr 7px 30px;
     row-gap: 15px;
     padding: 20px;
-}
-
-.botones {
-    display: grid;
-    grid-template-columns: 1fr 30px;
-}
-
-.botones-izquierda {
-    display: grid;
-    grid-template-columns: repeat(8, 30px) 250px;
-    column-gap: 25px;
-    align-items: center;
 }
 
 .barraGris {
@@ -39,6 +36,36 @@ img {
     background-color: rgb(220, 20, 60);
     height: 100%;
     width: 0%;
+}
+
+.botones {
+    display: grid;
+    grid-template-columns: 1fr 30px;
+}
+
+.botones-izquierda {
+    display: grid;
+    grid-template-columns: repeat(8, 30px) 1fr;
+    column-gap: 20px;
+    align-items: center;
+}
+
+.play {
+    position: relative;
+}
+
+.play-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 50px;
+    z-index: 100;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+}
+
+.play:hover .play-tooltip {
+    display: flex !important;
+    background-color: red;
 }
 
 video {

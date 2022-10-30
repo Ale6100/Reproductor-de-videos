@@ -1,21 +1,9 @@
 "use strict";
 
-const mezclar = (array) => { // Recibe un array y lo devuelve mezclado
-    const arrayMezclado = []
-    array.forEach(() => {
-        while (true) {
-            const elemetoAlAzar = array[parseInt(array.length*Math.random())] // Elemento al azar del array
-            if (arrayMezclado.includes(elemetoAlAzar) === false) { // Si el elemento no está en el nuevo array entonces lo agrega, se deja de repetir el while, y se ejecuta de nuevo el for
-                arrayMezclado.push(elemetoAlAzar)
-                break
-            }
-        }
-    })
-    return arrayMezclado
-}
+import { mezclar, conversion, botonesTippy } from "./utils.js"
 
 // Array con los nombres de los videos junto con su extensión
-const videos = ["Abba - Dancing Queen.mp4", "ACDC - Thunderstruck.mp4", "Arbol - El fantasma.mp4", "Arbol - Trenes camiones y tractores.mp4", "Calle 13 - Latinoamérica.mkv", "Coldplay - Adventure Of A Lifetime.mp4", "Coldplay - Paradise.mp4", "Evanescense - Bring Me To Life.mp4", "Intoxicados - Nunca quise.mp4", "La Franela - Hacer un puente.mp4", "León Gieco - Bandidos Rurales.mp4", "Los Autenticos decadentes - Un osito de peluche de Taiwan.mp4", "Mark Ronson Ft Bruno Mars - Uptown Funk.mp4", "Maroon 5 - Girls Like You ft Cardi B.mp4", "Michael Jackson - Beat It.mp4", "Rascal Flatts - Life Is A Highway From Cars.mp4", "Skillet -  Monster.mp4", "Skillet - Hero.mp4", "Soda Stereo - De Música Ligera.mp4", "Soda Stereo - Persiana Americana.mp4", "System of a down - Chop suey.mp4", "The Call - Regina Spektor.mp4", "The Kid LAROI Justin Bieber - STAY.mp4", "ZAZ - Je veux.mp4", "Taylor Swift - Crazier.mp4"]
+const videos = ["Abba - Dancing Queen.mp4", "ACDC - Thunderstruck.mp4", "Arbol - El fantasma.mp4", "Arbol - Trenes camiones y tractores.mp4", "Calle 13 - Latinoamérica.mkv", "Coldplay - Adventure Of A Lifetime.mp4", "Coldplay - Paradise.mp4", "Evanescense - Bring Me To Life.mp4", "Intoxicados - Nunca quise.mp4", "La Franela - Hacer un puente.mp4", "León Gieco - Bandidos Rurales.mp4", "Los Autenticos decadentes - Un osito de peluche de Taiwan.mp4", "Mark Ronson Ft Bruno Mars - Uptown Funk.mp4", "Maroon 5 - Girls Like You ft Cardi B.mp4", "Michael Jackson - Beat It.mp4", "Rascal Flatts - Life Is A Highway From Cars.mp4", "Skillet -  Monster.mp4", "Skillet - Hero.mp4", "Soda Stereo - De Música Ligera.mp4", "Soda Stereo - Persiana Americana.mp4", "System of a down - Chop suey.mp4", "The Call - Regina Spektor.mp4", "The Kid LAROI Justin Bieber - STAY.mp4", "ZAZ - Je veux.mp4", "Taylor Swift - Crazier.mp4", "Pharrell Williams - Happy.mp4"]
 
 let videosMezclados = mezclar(videos) // Orden de videos mezclados
 
@@ -70,8 +58,13 @@ const cambiar = (destino) => { // Reproduce el siguiente video de la lista, el a
             } 
         }
     }
-    vid.src = `videos/${videosMezclados[videoActual]}`
-    vid.play()
+    if (vid.paused) { // Para que sólo se reproduza si no estaba pausado
+        vid.src = `videos/${videosMezclados[videoActual]}`
+    } else {
+        vid.src = `videos/${videosMezclados[videoActual]}`
+        vid.play()
+    }
+    vid.playbackRate = velocidades[speed]; // Para que la velocidad no cambie aunque cambiemos de video
 }
 
 const reiniciar = () => { // Hago que se reinicie un video (va al segundo 0)
@@ -88,22 +81,11 @@ const reducir = () => { // Reduce o agranda el tamaño del video
     }
 }
 
-const conversion = (segundos) => { // Convierte segundos en formato "horas:minutos:segundos"
-    let minutos = parseInt(segundos/60)
-    let horas = parseInt(segundos/3600)
-    segundos = parseInt((segundos/60 - minutos)*60) // Para obtener los segundos entre 0 y 60. Por ejemplo si segundos = 90, entonces parseInt((1.5 - 1)*60) = 30. Los 60 segundos faltantes se convirtieron previamente en un minuto
-    if (segundos <= 9) segundos = "0"+parseInt(segundos)
-    if (minutos <= 9) minutos = "0"+minutos    
-    if (horas == 0) horas = "0"+horas
-    return isNaN(segundos) ? `00:00:00` : `${horas}:${minutos}:${segundos}`
-}
-
 const actualizar = () => { // Actualiza la barra roja "cargando" y el texto que representa al tiempo actual del video
     const tiempoActual = vid.currentTime
     const tiempoTotal = vid.duration
-    botonEstado.innerHTML = `${conversion(tiempoActual)} / ${conversion(tiempoTotal)}`
-    const porcentajeActual = tiempoActual*100/tiempoTotal
-    barraCargando.style.width = `${porcentajeActual}%`
+    botonEstado.innerHTML = `<p>${conversion(tiempoActual)} / ${conversion(tiempoTotal)}</p>`
+    barraCargando.style.width = `${tiempoActual*100/tiempoTotal}%` // Porcentaje actual
 }
 
 const buscar = (e) => { // Adelanta o retrocede el video cuando apretamos en la barra de tiempo
@@ -140,3 +122,27 @@ const iniciar = () => {
 }
 
 window.addEventListener("load", iniciar) // Ejecuta "inicio" cuando hayan cargado todos los datos
+
+botonesTippy.forEach(element => { // No son necesarias tantas propiedades, pero las coloco para probarlas ya que son nuevas para mí
+    tippy(`.${element.class}`, {
+        content: `${element.content}`,
+        placement: 'top',
+        arrow: true,
+        animation: 'fade',
+        // trigger: 'click',
+        interactive: false,
+        allowHTML: false,
+        delay: 0,
+        followCursor: false,
+        hideOnClick: false,
+        interactiveBorder: 2,
+        interactiveDebounce: 0,
+        maxWidth: 350,
+        moveTransition: '',
+        offset: [0, 10],
+        onShow(instance) {},
+        showOnCreate: false,
+        touch: ['hold', 500],
+        trigger: 'mouseenter focus',
+    });
+})
