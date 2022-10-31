@@ -14,6 +14,34 @@ const mezclar = (array) => { // Recibe un array y lo devuelve mezclado
     return arrayMezclado
 }
 
+const actualizarLista = (listaVideos, videoActual, cambiar) => { // Actualiza el orden de la lista en el HTML y le agrega un evento a todos los p
+    const listahtml = document.querySelector(".contenedor-lista")
+    listahtml.innerHTML = ""
+    listaVideos.forEach((nombre, index) => {
+        nombre = nombre.split(".")[0]
+        if (index === videoActual) {
+            listahtml.innerHTML += `
+            <div>
+                <p class="negrita">${index+1}) ${nombre}</p>
+            </div>
+            `
+        } else {
+            listahtml.innerHTML += `
+            <div>
+                <p>${index+1}) ${nombre}</p>
+            </div>
+            `
+        }
+    })
+
+    listaVideos.forEach((nombre, index) => {
+        const divHijo = listahtml.children[index]
+        divHijo.addEventListener("click", () => {
+            cambiar(index) // Hago que todos los p puedan cambiar la cancion con un click
+        })
+    })
+}
+
 const conversion = (segundos) => { // Convierte segundos en formato "horas:minutos:segundos"
     let minutos = parseInt(segundos/60)
     let horas = parseInt(segundos/3600)
@@ -51,7 +79,7 @@ const botonesTippy = [ // Array con los nombres de las clases de los botones jun
     },
     {
         class: "volumen",
-        content: "Mute OF/OFF (en un futuro habrán más niveles)"
+        content: "Mute ON/OFF (en un futuro será gradual)"
     },
     {
         class: "velocidad",
@@ -69,6 +97,7 @@ const botonesTippy = [ // Array con los nombres de las clases de los botones jun
 
 export {
     mezclar,
+    actualizarLista,
     conversion,
     botonesTippy
 }

@@ -19,17 +19,31 @@ img {
 }
 
 .contenedor-video {
-    height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 7px 30px;
-    row-gap: 15px;
-    padding: 20px;
+    margin: 5px;
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 70vh;
+    border: 3px solid rgb(0, 0, 0);
+    border-radius: 5px;
+}
+
+.div-video {
+    min-height: 60vh;
+}
+
+video {
+    height: 100%;
+    max-width: 100%;
 }
 
 .barraGris {
+    margin: 1px 0;
     background-color: rgb(192, 192, 192);
     height: 7px;
+    width: 100%;
 }
 
 .barraCargando {
@@ -39,19 +53,80 @@ img {
 }
 
 .botones {
-    display: grid;
-    grid-template-columns: 1fr 30px;
-}
-
-.botones-izquierda {
-    display: grid;
-    grid-template-columns: repeat(8, 30px) 1fr;
-    column-gap: 20px;
+    height: 30px;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
     align-items: center;
 }
 
-video {
-    width: 100%;
-    height: 100%;
-    max-height: calc(100vh - 102px);
+.botones img {
+    width: 30px;
+}
+
+.contenedor-lista {
+    margin: 5px;
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border: 3px solid rgb(0, 0, 0);
+    border-radius: 5px;
+}
+
+.contenedor-lista div {
+    margin: 5px 0;
+}
+
+.contenedor-lista div p {
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.contenedor-lista div p:hover {
+    font-weight: bold;
+    transform: scale(1.1);
+}
+
+.negrita {
+    font-weight: bold;
+}
+
+#creditos {
+    position: fixed;
+    right: 2vw;
+    top: 1vh;
+    transition: transform 0.5s;
+}
+
+#creditos:hover {
+    transform: scale(1.1);
+}
+
+#creditos a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+@media screen and (max-width: 600px) {
+    .contenedor-video {
+        height: 50vh;
+    }
+
+    .div-video {
+        min-height: 17vh;
+    }
+
+    .botones {
+        height: 25px;
+    }
+    
+    .botones img {
+        width: 25px;
+    }
+
+    .botones div p {
+        font-size: 0.8rem;
+    }
 }

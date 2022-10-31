@@ -1,16 +1,16 @@
 "use strict";
 
-import { mezclar, conversion, botonesTippy } from "./utils.js"
+import { mezclar, actualizarLista, conversion, botonesTippy } from "./utils.js"
 
 // Array con los nombres de los videos junto con su extensión
 const videos = ["Abba - Dancing Queen.mp4", "ACDC - Thunderstruck.mp4", "Arbol - El fantasma.mp4", "Arbol - Trenes camiones y tractores.mp4", "Calle 13 - Latinoamérica.mkv", "Coldplay - Adventure Of A Lifetime.mp4", "Coldplay - Paradise.mp4", "Evanescense - Bring Me To Life.mp4", "Intoxicados - Nunca quise.mp4", "La Franela - Hacer un puente.mp4", "León Gieco - Bandidos Rurales.mp4", "Los Autenticos decadentes - Un osito de peluche de Taiwan.mp4", "Mark Ronson Ft Bruno Mars - Uptown Funk.mp4", "Maroon 5 - Girls Like You ft Cardi B.mp4", "Michael Jackson - Beat It.mp4", "Rascal Flatts - Life Is A Highway From Cars.mp4", "Skillet -  Monster.mp4", "Skillet - Hero.mp4", "Soda Stereo - De Música Ligera.mp4", "Soda Stereo - Persiana Americana.mp4", "System of a down - Chop suey.mp4", "The Call - Regina Spektor.mp4", "The Kid LAROI Justin Bieber - STAY.mp4", "ZAZ - Je veux.mp4", "Taylor Swift - Crazier.mp4", "Pharrell Williams - Happy.mp4"]
 
 let videosMezclados = mezclar(videos) // Orden de videos mezclados
 
+let videoActual = 0; // Indice del video que se va a reproducir
+
 const velocidades = [0.5, 1, 2]; // Velocidades disponibles
 let speed = velocidades.indexOf(1); // Indice donde está ubicada la velocidad 1
-
-let videoActual = 0; // Indice del video que se va a reproducir
 
 const vid = document.querySelector("video");
 
@@ -21,11 +21,9 @@ const botonSiguiente = document.querySelector(".siguiente")
 const botonReiniciar = document.querySelector(".reiniciar")
 const botonAleatorio = document.querySelector(".aleatorio")
 const botonMezclar = document.querySelector(".mezclar")
-const botonReducir = document.querySelector(".reducir")
 const botonEstado = document.querySelector(".estado")
 const botonVelocidad = document.querySelector(".velocidad")
 
-const sectionVideo = document.querySelector(".contenedor-video")
 const barraGris = document.querySelector(".barraGris")
 const barraCargando = document.querySelector(".barraCargando")
 
@@ -44,12 +42,12 @@ const volumen = () => { // Colocar mute o desmutear
     botonVolumen.src = (vid.volume == 1) ? "https://img.icons8.com/ios-glyphs/30/000000/medium-volume.png" : "https://img.icons8.com/ios-glyphs/30/000000/mute--v1.png"
 }
 
-const cambiar = (destino) => { // Reproduce el siguiente video de la lista, el anterior, o uno aleatorio
+const cambiar = (destino, terminoSolo=false) => { // Reproduce el siguiente video de la lista, el anterior, o uno aleatorio
     if (destino === "siguiente") {
         videoActual = (videoActual === videosMezclados.length-1) ? 0 : videoActual+1 // Si el video actual es el último y le pedimos que vaya al siguiente video, entonces vuelve a empezar
     } else if (destino === "anterior") {
         videoActual = (videoActual === 0) ? videosMezclados.length-1 : videoActual-1
-    } else {
+    } else if (destino === "aleatorio") {
         while (true) { // Reproduce un video aleatorio
             const videoAleatorio = parseInt(videosMezclados.length*Math.random())
             if (videoActual !== videoAleatorio) { // Verifica que el video aleatorio no sea igual al actual, para que no se repita
@@ -57,8 +55,16 @@ const cambiar = (destino) => { // Reproduce el siguiente video de la lista, el a
                 break
             } 
         }
+    } else if (destino === "primero") {
+        videoActual = 0
+        
+    } else if (!isNaN(parseInt(destino))) { // Si destino es un número, entonces lo considero como un índice
+        videoActual = destino        
     }
-    if (vid.paused) { // Para que sólo se reproduza si no estaba pausado
+
+    actualizarLista(videosMezclados, videoActual, cambiar)
+
+    if (vid.paused && terminoSolo==false) { // Para que sólo se reproduza si no estaba pausado
         vid.src = `videos/${videosMezclados[videoActual]}`
     } else {
         vid.src = `videos/${videosMezclados[videoActual]}`
@@ -67,18 +73,10 @@ const cambiar = (destino) => { // Reproduce el siguiente video de la lista, el a
     vid.playbackRate = velocidades[speed]; // Para que la velocidad no cambie aunque cambiemos de video
 }
 
+actualizarLista(videosMezclados, videoActual, cambiar)
+
 const reiniciar = () => { // Hago que se reinicie un video (va al segundo 0)
     vid.currentTime = 0
-}
-
-const reducir = () => { // Reduce o agranda el tamaño del video
-    if (sectionVideo.style.transform == "scale(0.5)") { // Si el video está al 50% de su tamaño, lo agranda
-        sectionVideo.style.transform = "scale(1)"
-        botonReducir.src = "https://img.icons8.com/ios-glyphs/30/000000/collapse.png"
-    } else {
-        sectionVideo.style.transform = "scale(0.5)"
-        botonReducir.src="https://img.icons8.com/material-outlined/24/000000/full-page-view.png"
-    }
 }
 
 const actualizar = () => { // Actualiza la barra roja "cargando" y el texto que representa al tiempo actual del video
@@ -111,14 +109,13 @@ const iniciar = () => {
     botonAleatorio.addEventListener("click", () => cambiar("aleatorio"))
     botonMezclar.addEventListener("click", () => { // Mezcla el orden y reproduce un video aleatorio
         videosMezclados = mezclar(videos)
-        cambiar("aleatorio")
+        cambiar("primero")
     })
-    botonReducir.addEventListener("click", reducir)
     barraGris.addEventListener("click", buscar)
     botonVelocidad.addEventListener("click", velocidad)
     vid.addEventListener("loadeddata", actualizar) // Se actualiza cuando carga el video
     vid.addEventListener("timeupdate", actualizar) // Se actualiza cada vez que se actualiza el tiempo
-    vid.addEventListener("ended", () => cambiar("siguiente"))
+    vid.addEventListener("ended", () => cambiar("siguiente", true))
 }
 
 window.addEventListener("load", iniciar) // Ejecuta "inicio" cuando hayan cargado todos los datos
