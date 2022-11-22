@@ -1,6 +1,8 @@
 # Reproductor de videos (no terminado)
 
-La idea de este proyecto surgió después de observar que nunca hice un reproductor de videos ya que no hubo necesidad. Pero de todas maneras quiero hacerlo para ganar experiencia en el terreno. Pudes conocer el sitio subido a la web [aquí](https://reproductordevideos.netlify.app/).
+La idea de este proyecto surgió después de observar que nunca hice un reproductor de videos ya que no hubo necesidad. Pero de todas maneras quiero hacerlo para ganar experiencia en el terreno.
+
+Usa la versión más reciénte subida a la web [aquí](https://reproductordevideos.netlify.app/).
 
 ## Comenzando 🚀
 

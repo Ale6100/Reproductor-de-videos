@@ -5,45 +5,59 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-img {
-    width: 100%;
+:root {
+    --radio-borde-video: 5px;
+}
+
+main {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    height: 100vh;
 }
 
 .noTerminado {
     font-weight: bold;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 0, 0);
     font-size: 0.75rem;
     position: fixed;
     left: 1vw;
     top: 1vh;
 }
 
+.contenedor-video-fijo {
+    height: 100%;
+    width: 66%;
+}
+
 .contenedor-video {
-    margin: 5px;
-    padding: 5px 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    height: 70vh;
-    border: 3px solid rgb(0, 0, 0);
-    border-radius: 5px;
+    border-top: 3px solid rgb(0, 0, 0);
+    border-radius: var(--radio-borde-video);
+    height: 100%;
 }
 
 .div-video {
-    min-height: 60vh;
+    max-height: calc(100% - 10px - 30px);
+    width: 100%;
+    border-left: 3px solid rgb(0, 0, 0);
+    border-right: 3px solid rgb(0, 0, 0);
 }
 
 video {
     height: 100%;
-    max-width: 100%;
+    width: 100%;
 }
 
 .barraGris {
-    margin: 1px 0;
     background-color: rgb(192, 192, 192);
-    height: 7px;
+    height: 10px;
     width: 100%;
+    border-left: 3px solid rgb(0, 0, 0);
+    border-right: 3px solid rgb(0, 0, 0);
 }
 
 .barraCargando {
@@ -58,20 +72,26 @@ video {
     justify-content: space-evenly;
     width: 100%;
     align-items: center;
+    border: 3px solid rgb(0, 0, 0);;
+    border-top: 0px;
+    border-bottom-left-radius: var(--radio-borde-video);
+    border-bottom-right-radius: var(--radio-borde-video);
 }
 
 .botones img {
     width: 30px;
+    height: 30px;
 }
 
 .contenedor-lista {
-    margin: 5px;
-    padding: 5px 0;
+    padding: 5px;
     display: flex;
     flex-direction: column;
-    text-align: center;
+    text-align: start;
     border: 3px solid rgb(0, 0, 0);
     border-radius: 5px;
+    width: 33%;
+    overflow-y: auto;
 }
 
 .contenedor-lista div {
@@ -87,6 +107,7 @@ video {
 .contenedor-lista div p:hover {
     font-weight: bold;
     transform: scale(1.1);
+    transform: translate(0px, 0px);
 }
 
 .negrita {
@@ -96,12 +117,14 @@ video {
 #creditos {
     position: fixed;
     right: 2vw;
-    top: 1vh;
-    transition: transform 0.5s;
+    bottom: 1vh;
+    transition: all 0.5s;
 }
 
 #creditos:hover {
     transform: scale(1.1);
+    font-weight: bold;
+    transform: translate(0px, 0px);
 }
 
 #creditos a {
@@ -109,24 +132,23 @@ video {
     color: rgb(0, 0, 0);
 }
 
-@media screen and (max-width: 600px) {
-    .contenedor-video {
-        height: 50vh;
+@media screen and (max-width: 763px) {
+    main {
+        flex-direction: column;
+        height: auto;
+        row-gap: 10px;
     }
 
-    .div-video {
-        min-height: 17vh;
-    }
-
-    .botones {
-        height: 25px;
-    }
-    
-    .botones img {
-        width: 25px;
+    .contenedor-video-fijo {
+        height: auto;
+        width: 100%;
     }
 
     .botones div p {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .contenedor-lista {
+        width: 100%;
     }
 }
