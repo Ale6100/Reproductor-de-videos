@@ -11,6 +11,7 @@ const mezclar = (array) => { // Recibe un array y lo devuelve mezclado
             }
         }
     })
+    localStorage.setItem("listaVideos", JSON.stringify(arrayMezclado))
     return arrayMezclado
 }
 
@@ -52,52 +53,21 @@ const conversion = (segundos) => { // Convierte segundos en formato "horas:minut
     return isNaN(segundos) ? `00:00:00` : `${horas}:${minutos}:${segundos}`
 }
 
-const botonesTippy = [ // Array con los nombres de las clases de los botones junto con el contenido de sus tooltips
-    {
-        class: "play",
-        content: "Reproducir/parar"
-    },
-    {
-        class: "anterior",
-        content: "Anterior"
-    },
-    {
-        class: "siguiente",
-        content: "Siguiente"
-    },
-    {
-        class: "reiniciar",
-        content: "Reiniciar"
-    },
-    {
-        class: "aleatorio",
-        content: "Video aleatorio"
-    },
-    {
-        class: "mezclar",
-        content: "Mezclar lista"
-    },
-    {
-        class: "volumen",
-        content: "Mute ON/OFF (en un futuro será gradual)"
-    },
-    {
-        class: "velocidad",
-        content: `Cambiar velocidad`
-    },
-    {
-        class: "estado",
-        content: "Tiempo"
-    },
-    {
-        class: "reducir",
-        content: "Agrandar/achicar video"
+// Recibe tres números. El tercero debe ser positivo. Devuelve un array de números desde el origen hasta el final (sin incluir) solicitado, considerando un espaciado entre valores consecutivos
+// Si no se pide el espaciado se sobreentiende que es de 1
+const arange = (origen, final, espaciado = 1) => {
+    if (origen !== parseFloat(origen) || final !== parseFloat(final)) throw new Error('arange debe recibir números')
+    if (espaciado !== parseFloat(espaciado) || espaciado <= 0) throw new Error('El tercer parámetro de arange debe ser un número mayor a cero')
+    const array = []
+    for (let i=origen; i<final; i+=espaciado) {
+        array.push(i)
     }
-]
+    return array
+}
 
 export {
     mezclar,
     actualizarLista,
     conversion,
-    botonesTippy
+    arange
 }
