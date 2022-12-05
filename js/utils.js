@@ -1,6 +1,7 @@
 "use strict";
 
 const mezclar = (array) => { // Recibe un array y lo devuelve mezclado
+    if (typeof array == "number" || typeof array == "string") throw new Error('mezclar debe recibir un array')
     const arrayMezclado = []
     array.forEach(() => {
         while (true) {
@@ -65,9 +66,30 @@ const arange = (origen, final, espaciado = 1) => {
     return array
 }
 
+const cambiarIconoVolumen = (volumenActual, botonVolumen) => { // Coloca el ícono de volumen según corresponda
+    if (volumenActual === 0) { // Si tenía volumen mayor a cero, lo colocamos en mute
+        botonVolumen.src = "https://img.icons8.com/ios-glyphs/30/000000/mute--v1.png"
+    } else { // Sino, lo volvemos a como estaba antes
+        if (volumenActual < 0.33) {
+            botonVolumen.src = "https://img.icons8.com/ios-glyphs/30/null/low-volume.png"
+        } else if (volumenActual < 0.66) {
+            botonVolumen.src = "https://img.icons8.com/ios-glyphs/30/000000/medium-volume.png"
+        } else {
+            botonVolumen.src = "https://img.icons8.com/ios-glyphs/30/null/high-volume--v1.png"
+        }
+    }
+}
+
+const redondear = (n) => { // Recibe un número y lo devuelve redondeado a dos decimales. Fuente: https://www.delftstack.com/es/howto/javascript/javascript-round-to-2-decimal-places/#uso-de-la-funci%C3%B3n-personalizada-para-redondear-un-n%C3%BAmero-a-2-decimales-en-javascript
+    if (n != parseFloat(n)) throw new Error('redondear debe recibir un número')
+    return +(Math.round(n + "e+2") + "e-2")
+};
+
 export {
     mezclar,
     actualizarLista,
     conversion,
-    arange
+    arange,
+    cambiarIconoVolumen,
+    redondear
 }

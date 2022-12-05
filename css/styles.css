@@ -116,6 +116,10 @@ video {
     font-weight: bold;
 }
 
+#progresoVolumen {
+    outline: 0px solid rgb(0, 0, 0);
+}
+
 #creditos {
     position: fixed;
     right: 2vw;

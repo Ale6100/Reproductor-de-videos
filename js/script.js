@@ -1,6 +1,6 @@
 "use strict";
 
-import { mezclar, actualizarLista, conversion, arange } from "./utils.js"
+import { mezclar, actualizarLista, conversion, arange, cambiarIconoVolumen, redondear} from "./utils.js"
 
 // Array con los nombres de los videos junto con su extensión
 const videos = ["Abba - Dancing Queen.mp4", "ACDC - Thunderstruck.mp4", "Arbol - El fantasma.mp4", "Arbol - Trenes camiones y tractores.mp4", "Calle 13 - Latinoamérica.mkv", "Coldplay - Adventure Of A Lifetime.mp4", "Coldplay - Paradise.mp4", "Evanescense - Bring Me To Life.mp4", "Intoxicados - Nunca quise.mp4", "La Franela - Hacer un puente.mp4", "León Gieco - Bandidos Rurales.mp4", "Los Autenticos decadentes - Un osito de peluche de Taiwan.mp4", "Mark Ronson Ft Bruno Mars - Uptown Funk.mp4", "Maroon 5 - Girls Like You ft Cardi B.mp4", "Michael Jackson - Beat It.mp4", "Rascal Flatts - Life Is A Highway From Cars.mp4", "Skillet -  Monster.mp4", "Skillet - Hero.mp4", "Soda Stereo - De Música Ligera.mp4", "Soda Stereo - Persiana Americana.mp4", "System of a down - Chop suey.mp4", "The Call - Regina Spektor.mp4", "The Kid LAROI Justin Bieber - STAY.mp4", "ZAZ - Je veux.mp4", "Taylor Swift - Crazier.mp4", "Pharrell Williams - Happy.mp4"]
@@ -13,21 +13,20 @@ if (localStorage.getItem("listaVideos")) { // En caso de que ya exista una lista
 }
 
 let videoActual = 0; // Indice del video que se va a reproducir
+if (localStorage.getItem("videoActual")) {
+    videoActual = JSON.parse(localStorage.getItem("videoActual"))
+}
 
 const velocidades = arange(0.5, 2.5, 0.5) // Velocidades disponibles (es necesario que el rango del array sea siempre positivo y contenga al 1)
 
-let indiceVelAct // Indice donde está ubicada la velocidad inicial
+let indiceVelAct = velocidades.indexOf(1) // Indice donde está ubicada la velocidad inicial
 if (localStorage.getItem("velActual")) { // Si está guardada en el localStorage, la tomo de ahí
     indiceVelAct = velocidades.indexOf(JSON.parse(localStorage.getItem("velActual")))
-} else {
-    indiceVelAct = velocidades.indexOf(1)
 }
 
-let volumenActual
+let volumenActual = 0.5
 if (localStorage.getItem("volActual")) { // Si está guardada en el localStorage, la tomo de ahí
     volumenActual = JSON.parse(localStorage.getItem("volActual"))
-} else {
-    volumenActual = 1
 }
 
 const vid = document.querySelector("video");
@@ -39,7 +38,6 @@ const botonReiniciar = document.querySelector(".reiniciar")
 const botonAleatorio = document.querySelector(".aleatorio")
 const botonMezclar = document.querySelector(".mezclar")
 const botonEstado = document.querySelector(".estado")
-
 const barraGris = document.querySelector(".barraGris")
 const barraCargando = document.querySelector(".barraCargando")
 
@@ -50,19 +48,6 @@ const play = () => { // Reproducir o parar el video
     } else {
         vid.pause()
         botonPlay.src = "https://img.icons8.com/ios-glyphs/30/000000/play--v1.png"
-    }
-}
-
-const mute = () => { // Colocar o quitar el mute
-    const inputRange = document.getElementById("progresoVolumen")
-    if (vid.muted) {
-        vid.muted = false
-        botonVolumen.src = "https://img.icons8.com/ios-glyphs/30/000000/medium-volume.png"
-        inputRange.removeAttribute("disabled")
-    } else {
-        vid.muted = true
-        botonVolumen.src = "https://img.icons8.com/ios-glyphs/30/000000/mute--v1.png"
-        inputRange.setAttribute("disabled", "true")
     }
 }
 
@@ -85,6 +70,7 @@ const cambiar = (destino, terminoSolo=false) => { // Reproduce el siguiente vide
     } else if (!isNaN(parseInt(destino))) { // Si destino es un número, entonces lo considero como un índice
         videoActual = destino        
     }
+    localStorage.setItem("videoActual", videoActual) // Guarda el número del video actual en el localstorage
 
     actualizarLista(videosMezclados, videoActual, cambiar)
 
@@ -117,13 +103,48 @@ const buscar = (e) => { // Adelanta o retrocede el video cuando apretamos en la 
     vid.currentTime = vid.duration*porcentajeUbicacionClick/100 // Pido que el tiempo cambie a la ubicación pedida, según el porcentaje calculado
 }
 
+const actualizarSegunNumero = (num) => { // Si se presiona el número num, va al num*10% del video
+    vid.currentTime = vid.duration*parseInt(num*10)/100
+}
+
+const actualizarSegunFlechasHorizontales = (flecha) => { // Avanza o retrocede 5 segundos según cual flecha horizontal presionaste
+    vid.currentTime = flecha === "arrowleft" ? vid.currentTime - 5 : vid.currentTime + 5
+}
+
+const actualizarVolumenSegunFlechasVerticales = (flecha) => { // Hay un error en el volumen, tengo pendiente arreglarlo
+    if (flecha === "arrowup") {
+        if (0 <= vid.volume && vid.volume <= 0.95) {
+            vid.volume += 0.05
+            vid.volume = redondear(vid.volume)
+        } else if (0.95 < vid.volume && vid.volume <= 1) {
+            vid.volume = 1
+        }
+    } else if (flecha === "arrowdown") {
+        if (0.05 <= vid.volume && vid.volume <= 1) {
+            vid.volume -= 0.05
+            vid.volume = redondear(vid.volume)
+        } else if (0 <= vid.volume && vid.volume < 0.05) {
+            vid.volume = 0
+        }
+    }
+    
+    if (vid.volume > 0) volumenGuardado = ""
+    volumenActual = vid.volume
+    cambiarIconoVolumen(volumenActual, botonVolumen)
+    if (document.querySelector(".pRangoVolumen")) {
+        const texto = `Volumen: ${Math.round(vid.volume*100)}`
+        document.querySelector(".pRangoVolumen").innerText = texto
+        document.getElementById("progresoVolumen").value = `${vid.volume*100}`
+    }
+}
+
 const iniciar = () => {
+    cambiarIconoVolumen(volumenActual, botonVolumen)
     vid.src = `./videos/${videosMezclados[videoActual]}`;
     vid.playbackRate = velocidades[indiceVelAct];
     vid.volume = volumenActual
     vid.addEventListener("click", play)
     botonPlay.addEventListener("click", play)
-    botonVolumen.addEventListener("click", mute)
     botonAnterior.addEventListener("click", () => cambiar("anterior"))
     botonSiguiente.addEventListener("click", () => cambiar("siguiente"))
     botonReiniciar.addEventListener("click", reiniciar)
@@ -136,6 +157,48 @@ const iniciar = () => {
     vid.addEventListener("loadeddata", actualizar) // Se actualiza cuando carga el video
     vid.addEventListener("timeupdate", actualizar) // Se actualiza cada vez que se actualiza el tiempo
     vid.addEventListener("ended", () => cambiar("siguiente", true))
+    document.body.addEventListener("keydown", (e) => {
+        const tecla = e.key.toLowerCase()
+        if (tecla === " " || tecla === "k") {
+            play()
+        } else if (e.key === "P") {
+            cambiar("anterior")
+        } else if (e.key === "N") {
+            cambiar("siguiente")
+        } else if (tecla === "r") {
+            reiniciar()
+        } else if (tecla === "a") {
+            cambiar("aleatorio")
+        } else if (tecla === "m") {
+            mute()
+        } else if (tecla === "arrowup" || tecla === "arrowdown") {
+            actualizarVolumenSegunFlechasVerticales(tecla)
+        } else if ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9].some(num => num == tecla)) {
+            actualizarSegunNumero(tecla)
+        } else if (tecla === "arrowleft" || tecla === "arrowright") {
+            actualizarSegunFlechasHorizontales(tecla)
+        }
+    })
+}
+
+let volumenGuardado = ""
+const mute = () => {
+    if (vid.volume !== 0) { // Si tenía volumen mayor a cero, lo colocamos en mute
+        volumenGuardado = vid.volume // Guardamos el volumen para utilizarlo más adelante
+        vid.volume = 0
+    } else { // Sino, lo volvemos a como estaba antes
+        vid.volume = volumenGuardado
+        volumenGuardado = "" // Que sea un string vacío significa que ya no está en mute
+    }
+    volumenActual = vid.volume
+    cambiarIconoVolumen(volumenActual, botonVolumen)
+    localStorage.setItem("volActual", vid.volume)
+    const rangeVolumen = document.getElementById("progresoVolumen")
+    
+    if (rangeVolumen !== null) { // Modificamos el input range sólo i está visible  
+        rangeVolumen.value = vid.volume*100
+        document.querySelector(".pRangoVolumen").innerText = `Volumen: ${volumenGuardado == "" ? Math.round(volumenActual*100) : 0}`
+    }
 }
 
 window.addEventListener("load", iniciar) // Ejecuta "inicio" cuando hayan cargado todos los datos
@@ -143,23 +206,23 @@ window.addEventListener("load", iniciar) // Ejecuta "inicio" cuando hayan cargad
 const botonesTippy = [ // Array con los nombres de las clases de los botones junto con el contenido de sus tooltips
     {
         class: "play",
-        content: "Reproducir/parar"
+        content: "Reproducir/parar (k)"
     },
     {
         class: "anterior",
-        content: "Anterior"
+        content: "Anterior (P)"
     },
     {
         class: "siguiente",
-        content: "Siguiente"
+        content: "Siguiente (N)"
     },
     {
         class: "reiniciar",
-        content: "Reiniciar"
+        content: "Reiniciar (r)"
     },
     {
         class: "aleatorio",
-        content: "Video aleatorio"
+        content: "Video aleatorio (a)"
     },
     {
         class: "mezclar",
@@ -167,7 +230,7 @@ const botonesTippy = [ // Array con los nombres de las clases de los botones jun
     },
     {
         class: "volumen",
-        content: `<p class='pRangoVolumen'>Volumen ${Math.round(volumenActual*100)}</p><input type='range' id='progresoVolumen' min='0' max='100' step='1' value='${volumenActual*100}'>`
+        content: `<p class='pRangoVolumen'>Volumen ${ volumenGuardado == "" ? Math.round(volumenActual*100) : 0 }</p><input type='range' id='progresoVolumen' min='0' max='100' step='1' value='${volumenGuardado == "" ? volumenActual*100 : 0}'>`
     },
     {
         class: "velocidad",
@@ -190,7 +253,6 @@ botonesTippy.forEach(element => { // No son necesarias tantas propiedades, pero 
         placement: 'top',
         arrow: true,
         animation: 'fade',
-        // trigger: 'click',
         interactive: true,
         delay: 0,
         followCursor: false,
@@ -204,9 +266,13 @@ botonesTippy.forEach(element => { // No son necesarias tantas propiedades, pero 
             setTimeout(() => { // Dejo que espere un poco antes de llamar a la etiqueta
                 try { // Le agrega un evento al input range para poder cambiar el volumen de 0 a 100. El try está porque la etiqueta con id "progresoVolumen" sólo está definida cuando pasamos el mouse sobre el icono de volumen 
                     const rangeVolumen = document.getElementById("progresoVolumen")
+                    document.querySelector(".pRangoVolumen").innerText = `Volumen: ${volumenGuardado == "" ? Math.round(volumenActual*100) : 0}`
+                    rangeVolumen.value = `${volumenGuardado == "" ? volumenActual*100 : 0}`
                     rangeVolumen.addEventListener("input", () => {
                         vid.volume = rangeVolumen.value/100
-                        botonVolumen.src = (vid.volume == 0) ? "https://img.icons8.com/ios-glyphs/30/000000/mute--v1.png" : "https://img.icons8.com/ios-glyphs/30/000000/medium-volume.png"
+                        if (vid.volume !== 0) volumenGuardado = ""
+                        volumenActual = vid.volume
+                        cambiarIconoVolumen(volumenActual, botonVolumen)
                         document.querySelector(".pRangoVolumen").innerText = `Volumen: ${Math.round(vid.volume*100)}`
                         localStorage.setItem("volActual", vid.volume)
                     })
@@ -226,7 +292,6 @@ botonesTippy.forEach(element => { // No son necesarias tantas propiedades, pero 
             }, 0); 
         },
         showOnCreate: false,
-        touch: ['hold', 250],
-        trigger: 'mouseenter focus',
+        trigger: 'mouseenter',
     });
 })
