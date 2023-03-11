@@ -6,26 +6,37 @@ Usa la versión más reciénte subida a la web [aquí](https://reproductordevide
 
 ## Comenzando 🚀
 
-Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas.
+Lee atentamente las siguientes instrucciones si deseas obtener una copia funcional del proyecto en tu computadora.
+
+Primero debes descargar el archivo comprimido _zip_ desde el botón "code" o hacer click [aquí](https://github.com/Ale6100/Reproductor-de-videos/archive/refs/heads/main.zip).
+
+Si en cambio deseas tener una copia en tu propio repositorio de GitHub puedes _Forkear_ el proyecto.
 
 ### Pre-requisitos 📋
 
-Necesitas ejecutar el archivo desde un servidor. En caso de que tengas Visual Studio Code puedes utilizar la extensión Live Server.
+Necesitas tener previamente descargado e instalado [NodeJs](https://nodejs.org/).
 
 ### Instalación 🔧
 
-Ninguna!
+Instala las dependencias con el comando
+
+```npm install```
 
 ## Despliegue 📦
 
-Ejecuta el código con Live Server y listo!
+Corre el proyecto con el comando
+
+```npm run dev```
 
 ## Construido con 🛠️
 
-* HTML
 * CSS
-* JavaScript
-* [Tippy](https://atomiks.github.io/tippyjs/)
+* [ReactJS](https://reactjs.org/)
+* [NodeJs](https://nodejs.org/)
+* [Tailwind](https://tailwindcss.com/)
+* [Vite](https://vitejs.dev/)
+* [Framer Motion](https://www.framer.com/motion/)
+* [Lodash](https://lodash.com/)
 
 ## Autores ✒️
 
@@ -33,4 +44,4 @@ Ejecuta el código con Live Server y listo!
 
 ## Expresiones de Gratitud 🎁
 
-* **JAB** - [Video](https://youtu.be/1nKa_1D3_6M) - Por proporcionar la estructura general de mi primer commit que luego fui alterando con el paso del tiempo.
+* **JAB** - [Video](https://youtu.be/1nKa_1D3_6M) - Por proporcionar la estructura base de mi primer commit que luego fui alterando con el paso del tiempo.

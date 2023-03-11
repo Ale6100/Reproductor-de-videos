@@ -1,52 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Google tag (gtag.js) | Google Analytics-->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DZE1JJWFJ7"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-DZE1JJWFJ7');
-    </script>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://img.icons8.com/fluency/48/000000/listening-to-music-on-headphones.png" />
-    <link rel="stylesheet" href="./css/styles.css">
-    <title>Reproductor de videos</title>
-</head>
-<body>
-    <main>
-        <p class="noTerminado">Proyecto no terminado</p>
-        <section class="contenedor-video-fijo">
-            <div class="contenedor-video">
-                <div class="div-video">
-                    <video></video>
-                </div>
-    
-                <div class="barraGris">
-                    <div class="barraCargando"></div>
-                </div>
-    
-                <div class="botones">
-                    <img class="play" src="https://img.icons8.com/ios-glyphs/30/000000/play--v1.png">
-                    <img class="anterior" src="https://img.icons8.com/ios-glyphs/30/000000/skip-to-start--v1.png">
-                    <img class="siguiente" src="https://img.icons8.com/ios-glyphs/30/000000/end--v1.png">
-                    <img class="reiniciar" src="https://img.icons8.com/ios-glyphs/30/000000/reboot.png">
-                    <img class="aleatorio" src="https://img.icons8.com/dotty/30/000000/dice.png">
-                    <img class="mezclar" src="https://img.icons8.com/fluency-systems-regular/30/000000/swap-paths.png">
-                    <img class="volumen" src="https://img.icons8.com/ios-glyphs/30/000000/medium-volume.png">
-                    <img class="velocidad" src="https://img.icons8.com/material-outlined/30/000000/fast-download.png">
-                    <div class="estado"></div>
-                </div>
-            </div>
-        </section>
-        <section class="contenedor-lista"></section>
-        <p id="creditos">Desarrollado por <a href="https://www.linkedin.com/in/alejandro-portaluppi/" target="_blank">Alejandro P</a></p>
-    </main>
-    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script> <!-- Tippy.js -->
-    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
-    <script type="module" src="./js/script.js"></script>
-</body>
+    <head>
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-55BZQPK');</script>
+        <!-- End Google Tag Manager -->        
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="https://img.icons8.com/fluency/48/000000/listening-to-music-on-headphones.png" />
+        <title>Reproductor de videos</title>
+    </head>
+    <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-55BZQPK"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->        
+        <div id="root"></div>
+        <script type="module" src="/src/main.jsx"></script>
+    </body>
 </html>
