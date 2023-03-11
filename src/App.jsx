@@ -7,7 +7,7 @@ import Creditos from './components/Creditos'
 function App() {
     return (
         <PersonalContextProvider>
-            <main className='p-2 flex justify-between h-screen max-md:flex-col max-md:h-auto gap-3'>
+            <main className='p-2 flex justify-between h-screen gap-3 max-md:flex-col max-md:h-auto'>
                 <ContenedorVideo />
                 <ContenedorLista />
             </main>

@@ -18,11 +18,11 @@
 }
 
 .div-video {
-    max-height: calc(100% - 10px - 30px);
+    max-height: calc(100% - 10px - 30px - 8px - 8px);
 }
 
 main {
-    background-image: url("/img/background.png");
+    background-image: url("/img/background.webp");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

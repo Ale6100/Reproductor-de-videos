@@ -29,6 +29,8 @@ const ContenedorVideo = () => {
         return 0.5
     })
 
+    const [ alturaPantalla, setAluraPantalla ] = useState(innerHeight)
+
     const [ currentTime, setCurrentTime ] = useState(0) // Tiempo actual del video (el estado no permanece actualizado, sólo se actualiza en momentos importantes)
     
     const [ play, setPlay ] = useState(false)
@@ -140,6 +142,10 @@ const ContenedorVideo = () => {
             vid.currentTime = currentTime
         }
     }, [currentTime]);
+
+    useEffect(() => { // Cada vez que algún estado del array del useEffect cambia, se actualiza su valor en el localstorage
+        setAluraPantalla(innerHeight)
+    }, [innerHeight])
 
     const cambiar = (destino) => { // Cambia el id del video actual
         const listaIds = videos.map(video => video.id)
@@ -277,9 +283,9 @@ const ContenedorVideo = () => {
 
     return (
         <section tabIndex="0" onKeyDown={ keydown } className='h-full w-2/3 max-md:h-auto max-md:w-full outline-0'>
-            <div className="flex flex-col justify-center items-center h-full">
-                <div className="w-full border-l-2 border-r-2 border-t-2">
-                    <video onClick={ () => setPlay(!play) } onEnded={ () => cambiar("siguiente") } onLoadedData={ actualizar } onTimeUpdate={ actualizar } className='w-full h-full'></video>
+            <div className=" flex flex-col justify-center items-center h-full">
+                <div className="w-full border-l-2 border-r-2 border-t-2 div-video">
+                    <video onClick={ () => setPlay(!play) } onEnded={ () => cambiar("siguiente") } onLoadedData={ actualizar } onTimeUpdate={ actualizar } className='h-full w-full'></video>
                 </div>
     
                 <div ref={containerRef} onClick={ clickBarra } className="barraGris bg-gray-300 h-[10px] w-full border-l-2 border-r-2">
