@@ -1,6 +1,5 @@
 import { arange, superIndexOf, mezclarArray, isFalseNullOrUndefined, actualizarVolumenSegunFlechasVerticales, conversion } from '../utils/utils';
 import { useState, useEffect, useRef, useContext } from 'react';
-import listaVideosOriginal from '../utils/listaVideosOriginal';
 import Icons from './Icons';
 import arrayIconos from '../utils/arrayIconos';
 import { PersonalContext } from './PersonalContext';
@@ -12,7 +11,7 @@ let botonVolumen, vid, botonPlay, barraGris, botonEstado, barraCargando
 const ContenedorVideo = () => {
     const [ montado, setMontado ] = useState(false)
 
-    const { videos, setVideos, idVideoActual, setIdVideoActual } = useContext(PersonalContext);
+    const { videos, setVideos, idVideoActual, setIdVideoActual, videosElegidos, setVideosElegidos } = useContext(PersonalContext);
     
     const [ indiceVel, setIndiceVel ] = useState(() => { // Indice donde está ubicada la velocidad inicial
         if (localStorage.getItem("indiceVel")) {
@@ -28,8 +27,6 @@ const ContenedorVideo = () => {
         }
         return 0.5
     })
-
-    const [ alturaPantalla, setAluraPantalla ] = useState(innerHeight)
 
     const [ currentTime, setCurrentTime ] = useState(0) // Tiempo actual del video (el estado no permanece actualizado, sólo se actualiza en momentos importantes)
     
@@ -143,25 +140,41 @@ const ContenedorVideo = () => {
         }
     }, [currentTime]);
 
-    useEffect(() => { // Cada vez que algún estado del array del useEffect cambia, se actualiza su valor en el localstorage
-        setAluraPantalla(innerHeight)
-    }, [innerHeight])
-
     const cambiar = (destino) => { // Cambia el id del video actual
         const listaIds = videos.map(video => video.id)
         const tripleLista = listaIds.concat(listaIds, listaIds)
         const indiceEnTripleLista = superIndexOf(tripleLista, idVideoActual, 2)
 
-        if (destino === "anterior") {
-            setIdVideoActual(tripleLista[indiceEnTripleLista-1])
+        let contadorDeVideosElegidos = 0
+        Object.keys(videosElegidos).forEach(id => { // Esto lo hago para que no intente cambiar de video si no hay más de un video con el input check activado
+            if (videosElegidos[`${id}`]) contadorDeVideosElegidos+=1
+        })
+        if (contadorDeVideosElegidos <= 1) return ""
 
-        } else if (destino === "siguiente") {
-            setIdVideoActual(tripleLista[indiceEnTripleLista+1])
+        let cambio = 1
+        while (true) {
+            if (destino === "anterior") {
+                if (videosElegidos[`${tripleLista[indiceEnTripleLista-cambio]}`]) {
+                    setIdVideoActual(tripleLista[indiceEnTripleLista-cambio])
+                    break
+                } else {
+                    cambio++
+                }
+    
+            } else if (destino === "siguiente") {
+                if (videosElegidos[`${tripleLista[indiceEnTripleLista+cambio]}`]) {
+                    setIdVideoActual(tripleLista[indiceEnTripleLista+cambio])
+                    break
+                } else {
+                    cambio++
+                }
+            } else break
+        }
         
-        } else if (destino === "aleatorio") {
+        if (destino === "aleatorio") {
             while (true) { // Reproduce un video aleatorio
                 const idAleatorio = listaIds[parseInt(Math.random()*listaIds.length)]
-                if (idVideoActual !== idAleatorio) { // Verifica que el video aleatorio no sea igual al actual, para que no se repita
+                if (idVideoActual !== idAleatorio && videosElegidos[`${idAleatorio}`]) { // Verifica que el video aleatorio no sea igual al actual, para que no se repita
                     setIdVideoActual(idAleatorio)
                     break
                 } 
@@ -229,9 +242,9 @@ const ContenedorVideo = () => {
         } else if (tecla === "arrowup" || tecla === "arrowdown") {
             actualizarVolumenSegunFlechasVerticales(tecla, vol, setVol)
 
-        } else if ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9].some(num => num == tecla)) { // Si se presiona el número num, va al num*10% del video
+        } else if ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9].some(num => `${num}` === tecla)) { // Si se presiona el número num, va al num*10% del video
             setCurrentTime(vid.duration*parseInt(tecla*10)/100)
-            if (tecla == 0) vid.currentTime = 0
+            if (tecla === "0") vid.currentTime = 0
             
         } else if (tecla === "arrowleft" || tecla === "arrowright") { // Avanza o retrocede 5 segundos según cual flecha horizontal presionaste
             setCurrentTime(tecla === "arrowleft" ? vid.currentTime - 5 : vid.currentTime + 5)

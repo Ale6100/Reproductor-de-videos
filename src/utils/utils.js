@@ -90,7 +90,7 @@ const conversion = (segundos) => { // Convierte segundos en formato "horas:minut
     segundos = parseInt((segundos/60 - minutos)*60) // Para obtener los segundos entre 0 y 60. Por ejemplo si segundos = 90, entonces parseInt((1.5 - 1)*60) = 30. Los 60 segundos faltantes se convirtieron previamente en un minuto
     if (segundos <= 9) segundos = "0"+parseInt(segundos)
     if (minutos <= 9) minutos = "0"+minutos    
-    if (horas == 0) horas = "0"+horas
+    if (horas === 0) horas = "0"+horas
     return isNaN(segundos) ? `00:00:00` : `${horas}:${minutos}:${segundos}`
 }
 

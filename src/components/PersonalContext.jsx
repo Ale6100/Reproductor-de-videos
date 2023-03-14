@@ -21,8 +21,17 @@ const PersonalContextProvider = ({ children }) => {
         return videos[0].id
     })
 
+    const [ videosElegidos, setVideosElegidos ] = useState(() => { // Objeto cuyas claves son los IDs de los videos, y los valores booleanos representan si pertenecen o no a la lista de canciones que se reproducen
+        if (localStorage.getItem("videosElegidos")) {
+            return JSON.parse(localStorage.getItem("videosElegidos"))
+        }
+        const obj = {}
+        videos.forEach(vid => obj[`${vid.id}`] = true)
+        return obj
+    })
+
     return (
-        <PersonalContext.Provider value={{ videos, setVideos, idVideoActual, setIdVideoActual }}>
+        <PersonalContext.Provider value={{ videos, setVideos, idVideoActual, setIdVideoActual, videosElegidos, setVideosElegidos }}>
             {children}
         </PersonalContext.Provider>
     );
