@@ -1,4 +1,13 @@
-const arrayIconos = [
+interface arrayIconosProps {
+    type: string,
+    img: string,
+    className_: string,
+    texto?: string,
+    onClick?: () => void,
+    onClickImg?: () => void
+}
+
+const arrayIconos: arrayIconosProps[] = [
     {
         type: "play",
         img: "play.png",

@@ -31,7 +31,7 @@ Corre el proyecto con el comando
 ## Construido con 🛠️
 
 * CSS
-* JavaScript
+* TypeScript(typescriptlang.org)
 * [ReactJS](https://reactjs.org/)
 * [NodeJs](https://nodejs.org/)
 * [Tailwind](https://tailwindcss.com/)

@@ -1,7 +1,7 @@
 import { arraysIgualesOrdenIndistinto } from "./adHoc.js"
 
 // Recibe tres números. El tercero es opcional pero debe ser positivo. Devuelve un array de números equiespaciados desde el origen hasta el final (sin incluir) solicitado, considerando el espaciado especificado
-const arange = (origen, final, espaciado = 1) => {
+const arange = (origen: number, final: number, espaciado: number = 1) => {
     if (typeof origen !== 'number' || typeof final !== 'number') throw new Error(`Los primeros dos parámetros de arange deben ser númericos. Se ha recibido ${JSON.stringify(origen)} (${typeof origen}) y ${JSON.stringify(final)} (${typeof final})`)
     if (typeof espaciado !== 'number' || espaciado <= 0) throw new Error(`El tercer parámetro de arange debe ser un número mayor a cero. Se ha recibido ${JSON.stringify(espaciado)} (${typeof espaciado})`)
     const array = []
@@ -12,12 +12,12 @@ const arange = (origen, final, espaciado = 1) => {
 }
 
 // Recibe un "arrayNuevo" y un "arrayViejo". Devuelve un "arrayResultante" tal que tenga los mismos elementos que arrayNuevo pero en el orden que están en arrayViejo. Por otro lado los elementos de arrayNuevo que no estén en arrayViejo se colocan al final de arrayResultante, mientras que los elementos de arrayViejo que no están en arrayNuevo se ignoran
-const comprobarPermanencia = (arrayNuevo, arrayViejo) => {
+const comprobarPermanencia = (arrayNuevo: any[], arrayViejo: any[]) => {
     if (!Array.isArray(arrayNuevo) || !Array.isArray(arrayViejo)) throw new TypeError(`comprobarPermanencia debe recibir dos arrays. Se ha recibido ${JSON.stringify(arrayNuevo)} (${typeof arrayNuevo}) y ${JSON.stringify(arrayViejo)} (${typeof arrayViejo})`)
 
     if (arraysIgualesOrdenIndistinto(arrayNuevo, arrayViejo)) return arrayViejo
 
-    let arrayResultante = []
+    let arrayResultante: any[] = []
 
     arrayViejo.forEach(elemento => { // Agrega los elementos del array viejo en el array resultante, siempre y cuando estén en el nuevo
         if (arrayNuevo.includes(elemento)) arrayResultante.push(elemento)
@@ -29,7 +29,7 @@ const comprobarPermanencia = (arrayNuevo, arrayViejo) => {
     return arrayResultante
 }
 
-const superIndexOf = (array, element, n) => {
+const superIndexOf = (array: number[], element: number, n: number) => {
     const cantVecesN = array.reduce((prev, act) => {
         if (act === element) {
             return prev + 1;
@@ -47,22 +47,23 @@ const superIndexOf = (array, element, n) => {
     return index
 }
 
-const mezclarArray = (array) => {
+const mezclarArray = (array: any[]) => {
     if (!Array.isArray(array)) throw new TypeError(`mezclar debe recibir un array. Se ha recibido ${JSON.stringify(array)} (${typeof array})`)
     const arrayMezclado = []
-    while (array.length > 0) { // Elimino un elemento al azar del array original, y al mismo tiempo lo coloco en el "array mezclado". Repito el ciclo hasta que el array original quede vacío
-        const indiceAzar = Math.floor(Math.random()*array.length)
-        const elementoRandom = array.splice(indiceAzar, 1)[0]
+    let arrayCopia = array.slice();
+    while (arrayCopia.length > 0) { // Elimino un elemento al azar del array original, y al mismo tiempo lo coloco en el "array mezclado". Repito el ciclo hasta que el array original quede vacío
+        const indiceAzar = Math.floor(Math.random()*arrayCopia.length)
+        const elementoRandom = arrayCopia.splice(indiceAzar, 1)[0]
         arrayMezclado.push(elementoRandom)
     }
     return arrayMezclado
 }
 
-const isFalseNullOrUndefined = (value) => {
+const isFalseNullOrUndefined = (value: any) => {
     return value === false || value === null || value === undefined;
 }
 
-const actualizarVolumenSegunFlechasVerticales = (tecla, vol, setVol) => {
+const actualizarVolumenSegunFlechasVerticales = (tecla: string, vol: number, setVol: (vol: number) => void) => {
     if (tecla === "arrowup") {
         if (0 <= vol && vol <= 0.95) {
             setVol(vol + 0.05)
@@ -84,14 +85,14 @@ const actualizarVolumenSegunFlechasVerticales = (tecla, vol, setVol) => {
     }
 }
 
-const conversion = (segundos) => { // Convierte segundos en formato "horas:minutos:segundos"
-    let minutos = parseInt(segundos/60)
-    let horas = parseInt(segundos/3600)
-    segundos = parseInt((segundos/60 - minutos)*60) // Para obtener los segundos entre 0 y 60. Por ejemplo si segundos = 90, entonces parseInt((1.5 - 1)*60) = 30. Los 60 segundos faltantes se convirtieron previamente en un minuto
-    if (segundos <= 9) segundos = "0"+parseInt(segundos)
-    if (minutos <= 9) minutos = "0"+minutos    
-    if (horas === 0) horas = "0"+horas
-    return isNaN(segundos) ? `00:00:00` : `${horas}:${minutos}:${segundos}`
+const conversion = (segundos: number): string => {
+    if (isNaN(segundos)) return '00:00:00';
+    let minutos: number = Math.floor(segundos / 60);
+    let horas: number = Math.floor(segundos / 3600);
+    segundos = Math.floor((segundos / 60 - minutos) * 60);
+    if (minutos <= 9) minutos = parseInt('0' + minutos);
+    if (horas === 0) horas = parseInt('0' + horas);
+    return `${horas === 0 ? `0${horas}` : horas}:${minutos <= 9 ? `0${minutos}` : minutos}:${segundos <= 9 ? `0${segundos}` : segundos}`;
 }
 
 export {

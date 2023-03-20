@@ -1,7 +1,30 @@
-import React from 'react';
 import { motion } from "framer-motion"
 
-const Icons = ({ icon, showTooltips, setShowTooltips, velocidades, indiceVel, setIndiceVel, vol, setVol }) => {
+interface arrayIconosProps {
+    type: string,
+    img: string,
+    className_: string,
+    texto?: string,
+    onClick?: () => void,
+    onClickImg?: () => void
+}
+
+interface showTooltipsProps {
+    [ket: string]: boolean
+}
+
+interface iconsProps {
+    icon: arrayIconosProps,
+    showTooltips: showTooltipsProps
+    setShowTooltips: React.Dispatch<React.SetStateAction<showTooltipsProps>>,
+    velocidades: number[],
+    indiceVel: number,
+    setIndiceVel: React.Dispatch<React.SetStateAction<number>>,
+    vol: number,
+    setVol: React.Dispatch<React.SetStateAction<number>>
+}
+
+const Icons = ({ icon, showTooltips, setShowTooltips, velocidades, indiceVel, setIndiceVel, vol, setVol }: iconsProps) => {
 
     const hoverStar = () => { // Los Object.keys a priori no son necesarios, pero sirven para evitar bugs menores
         Object.keys(showTooltips).forEach(key => showTooltips[key] = false);
@@ -11,6 +34,16 @@ const Icons = ({ icon, showTooltips, setShowTooltips, velocidades, indiceVel, se
     const hoverEnd = () => {
         Object.keys(showTooltips).forEach(key => showTooltips[key] = false);
         setShowTooltips({ ...showTooltips })
+    }
+
+    const onInputVol = (e: React.FormEvent<HTMLInputElement>) => {
+        const formTarget = e.target as HTMLFormElement;
+        setVol(formTarget.value/100)
+    }
+
+    const onInputVel = (e: React.FormEvent<HTMLInputElement>) => {
+        const formTarget = e.target as HTMLFormElement;
+        setIndiceVel(velocidades.indexOf(parseFloat(formTarget.value)))
     }
 
     return (
@@ -23,14 +56,14 @@ const Icons = ({ icon, showTooltips, setShowTooltips, velocidades, indiceVel, se
                     icon.type === "volumen" ? 
                     <div className='border-2 bg-black text-white p-1 rounded-sm'>
                         <p>Volumen {Math.round(vol*100)}</p>
-                        <input onInput={ (e) => setVol(e.target.value/100) } onKeyDown={(e) => e.preventDefault()} type="range" min={0} max={100} step={1} value={Math.round(vol*100)}/>
+                        <input onInput={ onInputVol } onKeyDown={(e) => e.preventDefault()} type="range" min={0} max={100} step={1} value={Math.round(vol*100)}/>
                     </div> :
 
                     icon.type === "velocidad" ? 
 
                     <div className='border-2 bg-black text-white p-1 rounded-sm'>
                         <p>Velocidad x{velocidades[indiceVel]}</p>
-                        <input onInput={ (e) => setIndiceVel(velocidades.indexOf(parseFloat(e.target.value))) } type="range" min={velocidades[0]} max={velocidades.at(-1)} step={velocidades[1] - velocidades[0]} value={velocidades[indiceVel]}/>
+                        <input onInput={ onInputVel } type="range" min={velocidades[0]} max={velocidades.at(-1)} step={velocidades[1] - velocidades[0]} value={velocidades[indiceVel]}/>
                     </div> :
 
                     <p className="border-2 bg-black text-white p-1 rounded-sm">{icon.texto}</p>

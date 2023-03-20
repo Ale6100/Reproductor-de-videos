@@ -3,8 +3,11 @@ import { PersonalContext } from './PersonalContext';
 
 const ContenedorLista = () => {
     const [ montado, setMontado ] = useState(false)
-    const { videos, idVideoActual, setIdVideoActual, videosElegidos, setVideosElegidos } = useContext(PersonalContext)
     const [ valueSearch, setValueSearch ] = useState("")
+
+    const personalContext = useContext(PersonalContext)
+    if (!personalContext) return <></>
+    const { videos, idVideoActual, setIdVideoActual, videosElegidos, setVideosElegidos } = personalContext
 
     useEffect(() => {
         setMontado(true)
@@ -16,18 +19,18 @@ const ContenedorLista = () => {
         }
     }, [videosElegidos]);
 
-    const onChangeInputCheckbox = (e) => { // Modifica el valor de videosElegidos, para que React se de cuenta si queremos habilitar o deshabilitar una canción
+    const onChangeInputCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => { // Modifica el valor de videosElegidos, para que React se de cuenta si queremos habilitar o deshabilitar una canción
         setVideosElegidos({...videosElegidos, [`${e.target.dataset.id}`]: e.target.checked})
     }
 
     const marcarTodo = () => {
-        const obj = {}
+        const obj: { [key: string]: boolean } = {}
         videos.forEach(vid => obj[`${vid.id}`] = true)
         setVideosElegidos(obj)
     }
 
     const desMarcarTodo = () => {
-        const obj = {}
+        const obj: { [key: string]: boolean } = {}
         videos.forEach(vid => obj[`${vid.id}`] = false)
         setVideosElegidos(obj)
     }
