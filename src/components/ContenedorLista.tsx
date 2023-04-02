@@ -37,7 +37,7 @@ const ContenedorLista = () => {
 
     return (
         <section className='p-1 h-full flex flex-col text-start border-purple-600 border-2 rounded-sm w-1/3 max-md:w-full'>
-            <input onChange={(e) => setValueSearch(e.target.value)} type="search" name="search" className='bg-black border-2 px-1' placeholder='Buscar...'/>
+            <input onChange={(e) => setValueSearch(e.target.value)} type="search" name="search" autoComplete='off' className='bg-black border-2 px-1' placeholder='Buscar...'/>
 
             <div className='my-1 flex w-full justify-evenly whitespace-nowrap'>
                 <button onClick={ marcarTodo } className='px-2 border-2 rounded-sm hover:bg-opacity-70 md:hover:bg-purple-900 active:bg-purple-400'>Marcar todo</button>

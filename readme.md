@@ -1,4 +1,4 @@
-# Reproductor de videos (no terminado)
+# Reproductor de videos
 
 La idea de este proyecto surgió después de observar que nunca hice un reproductor de videos ya que no hubo necesidad. Pero de todas maneras quiero hacerlo para ganar experiencia en el terreno.
 
@@ -31,7 +31,7 @@ Corre el proyecto con el comando
 ## Construido con 🛠️
 
 * CSS
-* TypeScript(typescriptlang.org)
+* [TypeScript](typescriptlang.org)
 * [ReactJS](https://reactjs.org/)
 * [NodeJs](https://nodejs.org/)
 * [Tailwind](https://tailwindcss.com/)

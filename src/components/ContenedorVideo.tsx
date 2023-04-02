@@ -6,7 +6,7 @@ import { PersonalContext } from './PersonalContext';
 
 const velocidades = arange(0.5, 2.5, 0.5) // Velocidades disponibles (es necesario que el rango del array sea siempre positivo y contenga al 1)
 
-let botonVolumen: HTMLImageElement | null, vid: HTMLVideoElement | null, botonPlay: HTMLImageElement | null, barraGris: HTMLDivElement | null, botonEstado: HTMLDivElement | null, barraCargando: HTMLDivElement | null
+let botonVolumen: HTMLImageElement | null, vid: HTMLVideoElement | null, botonPlay: HTMLImageElement | null, barraGris: HTMLDivElement | null, botonEstado: HTMLDivElement | null, barraCargando: HTMLDivElement | null,  cartelTiempo: HTMLElement | null
 
 const ContenedorVideo = () => {
     const [ montado, setMontado ] = useState(false)
@@ -35,6 +35,8 @@ const ContenedorVideo = () => {
     const [ play, setPlay ] = useState(false)
     const [ mute, setMute ] = useState({ mute: false, volGuardado: vol }) // Objeto que especifica si el video está muteado, y si ese es el caso, el volumen que tenía antes de estarlo
     const [ showTooltips, setShowTooltips ] = useState<{[ket: string]: boolean}>({ play: false, anterior: false, siguiente: false, reiniciar: false, aleatorio: false, mezclar: false, volumen: false, velocidad: false, estado: false })
+    const [ claseTimeTooltip, setClaseTimeTooltip ] = useState("scale-0 opacity-0")
+    const [ timeTooltip, setTimeTooltip ] = useState("00:00:00")
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -46,6 +48,7 @@ const ContenedorVideo = () => {
         barraGris = document.querySelector(".barraGris")
         botonEstado = document.querySelector(".estado")
         barraCargando = document.querySelector(".barraCargando")
+        cartelTiempo = document.getElementById("cartelTiempo")
 
         // Seteo los parámetros iniciales
         if (vid) {
@@ -218,8 +221,7 @@ const ContenedorVideo = () => {
         setIdVideoActual(arrayMezclado[0].id)
     }
 
- // Adelanta o retrocede el video cuando apretamos en la barra de tiempo
-    const clickBarra = (e: React.MouseEvent<HTMLDivElement>) => {
+    const clickBarra = (e: React.MouseEvent<HTMLDivElement>) => { // Adelanta o retrocede el video cuando apretamos en la barra de tiempo
         const containerCurrent = containerRef.current;
         if (!containerCurrent || ! barraGris || !vid) return undefined;
         const rect = containerCurrent.getBoundingClientRect();
@@ -318,6 +320,23 @@ const ContenedorVideo = () => {
         return icon
     })
 
+    const mouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cartelTiempo || innerWidth < 768) return undefined
+        
+        const x = e.clientX
+        const y = e.clientY
+        cartelTiempo.style.left = `${x - 27}px` // Quiero que el tooltip persiga al mouse
+        cartelTiempo.style.top = `${y - 35}px`
+
+        const containerCurrent = containerRef.current;
+        if (!containerCurrent || ! barraGris || !vid) return undefined;
+        const rect = containerCurrent.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left; // Ubicación en x relativa al borde izquierdo de la barra gris
+        const anchoBarraGris = barraGris.offsetWidth;
+        const porcentajeUbicacionClick = offsetX*100/anchoBarraGris
+        setTimeTooltip(conversion(vid.duration*porcentajeUbicacionClick/100)) // Pido que el tiempo en el tooltip cambie a la ubicación pedida, según el porcentaje calculado
+    }
+
     return (
         <section tabIndex={0} onKeyDown={ keydown } className='h-full w-2/3 max-md:h-auto max-md:w-full outline-0'>
             <div className=" flex flex-col justify-center items-center h-full">
@@ -325,14 +344,15 @@ const ContenedorVideo = () => {
                     <video onClick={ () => setPlay(!play) } onEnded={ () => cambiar("siguiente") } onLoadedData={ actualizar } onTimeUpdate={ actualizar } className='h-full w-full'></video>
                 </div>
     
-                <div ref={containerRef} onClick={ clickBarra } className="barraGris bg-gray-300 h-[10px] w-full border-l-2 border-r-2">
+                <div ref={containerRef} onClick={ clickBarra } onMouseMove={ mouseMove } onMouseEnter={ () => setClaseTimeTooltip("scale-1 opacity-1") } onMouseLeave={ () => setClaseTimeTooltip("scale-0 opacity-0") } className="relative barraGris bg-gray-300 h-[10px] w-full border-l-2 border-r-2">
                     <div className="barraCargando bg-red-600 rounded-br-sm rounded-tr-sm h-full w-0"></div>
+                    <p id="cartelTiempo" className={`fixed font-semibold ${claseTimeTooltip}`}>{timeTooltip}</p>
                 </div>
     
                 <div className="botones h-[30px] flex justify-evenly w-full items-center border-2 border-t-0 rounded-br-sm rounded-bl-sm">
                     { 
                         arrayDetallesIconos.map((icon) => (
-                            <Icons icon={icon} showTooltips={showTooltips} setShowTooltips={setShowTooltips} velocidades={velocidades} indiceVel={indiceVel} setIndiceVel={setIndiceVel} vol={vol} setVol={setVol} key={icon?.type}/>
+                            <Icons {...{icon, showTooltips, setShowTooltips, velocidades, indiceVel, setIndiceVel, vol, setVol}} key={icon?.type}/>
                         ))
                     }
                     <div className="estado whitespace-nowrap"></div>
