@@ -19,15 +19,14 @@ const ContenedorVideo = () => {
         const item = localStorage.getItem("indiceVel")
         if (item) {
             const indice = JSON.parse(item)
-            return velocidades.findIndex((vel) => vel === velocidades[indice]) === -1 ? velocidades.indexOf(1) : indice // Actualizo el estado siempre y cuando la velocidad siga en la lista de velocidades disponibles
+            return velocidades.includes(velocidades[indice]) ? indice : velocidades.indexOf(1); // La velocidad inicial será la asociada al índice del LocalStorage, siempre y cuando dicho indice siga existiendo
         }
         return velocidades.indexOf(1)
     })
 
-    const [ vol, setVol ] = useState(() => { // Volumen (desde 0 hasta 1)
-        const item = localStorage.getItem("vol")
-        if (item) return JSON.parse(item)
-        return 0.5
+    const [ vol, setVol ] = useState<number>(() => { // Volumen (desde 0 hasta 1)
+        const item = localStorage.getItem("vol");
+        return item ? JSON.parse(item) : 0.5;
     })
 
     const [ currentTime, setCurrentTime ] = useState(0) // Tiempo actual del video (el estado no permanece actualizado, sólo se actualiza en momentos importantes)
@@ -36,11 +35,11 @@ const ContenedorVideo = () => {
     const [ mute, setMute ] = useState({ mute: false, volGuardado: vol }) // Objeto que especifica si el video está muteado, y si ese es el caso, el volumen que tenía antes de estarlo
     const [ showTooltips, setShowTooltips ] = useState<{[ket: string]: boolean}>({ play: false, anterior: false, siguiente: false, reiniciar: false, aleatorio: false, mezclar: false, volumen: false, velocidad: false, estado: false })
     const [ claseTimeTooltip, setClaseTimeTooltip ] = useState("scale-0 opacity-0")
-    const [ timeTooltip, setTimeTooltip ] = useState("00:00:00")
+    const [ timeTooltip, setTimeTooltip ] = useState<`${string}:${string}:${string}`>("00:00:00")
 
     const containerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => { // La primera vez que ingresamos a la página accedemsos a los valores del localstorage y los guardamos como estados, si es que están
+    useEffect(() => { // La primera vez que ingresamos a la página accedemos a los valores del localstorage y los guardamos como estados, si es que están
         // Selecciono las etiquetas necesarias
         botonVolumen = document.querySelector(".volumen")
         vid = document.querySelector("video");
@@ -52,7 +51,7 @@ const ContenedorVideo = () => {
 
         // Seteo los parámetros iniciales
         if (vid) {
-            vid.src = `./videos/${videos.find(video => video.id === idVideoActual).nombre }`;
+            vid.src = `./videos/${videos.find(video => video.id === idVideoActual)?.nombre }`; // Puse un ? para que TypeScript no moleste, pero no es problema ya que el find nunca será undefined
             vid.playbackRate = velocidades[indiceVel];
             vid.volume = vol
         }
@@ -74,17 +73,15 @@ const ContenedorVideo = () => {
         setMontado(true)
     }, []);
 
-    useEffect(() => { // Cada vez que algún estado del array del useEffect cambia, se actualiza su valor en el localstorage
-        if (montado) {
-            localStorage.setItem("videos", JSON.stringify(videos))
-        }
+    useEffect(() => { // Cada vez que el estado del array de este useEffect cambia, se actualiza su valor en el localstorage
+        if (montado) localStorage.setItem("videos", JSON.stringify(videos))
     }, [videos])
 
     useEffect(() => { // Mantiene actualizado el video actual
         if (montado) {
             localStorage.setItem("idVideoActual", JSON.stringify(isFalseNullOrUndefined(idVideoActual) ? videos[0].id : idVideoActual))
             if (!vid || !botonPlay) return
-            vid.src = `./videos/${videos.find(video => video.id === idVideoActual).nombre}`;
+            vid.src = `./videos/${videos.find(video => video.id === idVideoActual)?.nombre}`; // Puse un ? para que TypeScript no moleste, pero no es problema ya que el find nunca será undefined
         
             if (play) {
                 vid.play()
@@ -123,7 +120,7 @@ const ContenedorVideo = () => {
         }
     }, [vol])
 
-    useEffect(() => { // Mantiene actualizada la orden play/pause | A priori no parece ser necesario ya que la validaciónvid.paused da true cuando el video está pausado, pero se modifica solo cuando cambio de video, así que utilizo este useEffect para asegurarme de que no cambie su valor
+    useEffect(() => { // Mantiene actualizada la orden play/pause
         if (montado && vid && botonPlay) {
             if (play) {
                 vid.play()
@@ -153,19 +150,19 @@ const ContenedorVideo = () => {
 
     const cambiar = (destino: string) => { // Cambia el id del video actual
         const listaIds = videos.map(video => video.id)
-        const tripleLista = listaIds.concat(listaIds, listaIds)
+        const tripleLista = listaIds.concat(listaIds, listaIds) // Uso una "triple lista" para asegurarme que no haya problema en los extremos: ya que la lista del medio siempre tendrá dos a su lado, y por lo tanto es como si la última canción fuera la anterior de la primera
         const indiceEnTripleLista = superIndexOf(tripleLista, idVideoActual, 2)
 
         let contadorDeVideosElegidos = 0
         Object.keys(videosElegidos).forEach(id => { // Esto lo hago para que no intente cambiar de video si no hay más de un video con el input check activado
-            if (videosElegidos[`${id}`]) contadorDeVideosElegidos+=1
+            if (videosElegidos[id]) contadorDeVideosElegidos+=1
         })
         if (contadorDeVideosElegidos <= 1) return ""
 
         let cambio = 1
         while (true) {
             if (destino === "anterior") {
-                if (videosElegidos[`${tripleLista[indiceEnTripleLista-cambio]}`]) {
+                if (videosElegidos[tripleLista[indiceEnTripleLista-cambio]]) { // Paso a la anterior canción, siempre y cuando esté habilitada para su reproducción
                     setIdVideoActual(tripleLista[indiceEnTripleLista-cambio])
                     break
                 } else {
@@ -173,7 +170,7 @@ const ContenedorVideo = () => {
                 }
     
             } else if (destino === "siguiente") {
-                if (videosElegidos[`${tripleLista[indiceEnTripleLista+cambio]}`]) {
+                if (videosElegidos[tripleLista[indiceEnTripleLista+cambio]]) {
                     setIdVideoActual(tripleLista[indiceEnTripleLista+cambio])
                     break
                 } else {
@@ -185,14 +182,14 @@ const ContenedorVideo = () => {
         if (destino === "aleatorio") {
             while (true) { // Reproduce un video aleatorio
                 const idAleatorio = listaIds[Math.floor(Math.random()*listaIds.length)]
-                if (idVideoActual !== idAleatorio && videosElegidos[`${idAleatorio}`]) { // Verifica que el video aleatorio no sea igual al actual, para que no se repita
+                if (idVideoActual !== idAleatorio && videosElegidos[idAleatorio]) { // Verifica que el video aleatorio no sea igual al actual, para que no se repita. Además hago que se reproduzca sólo si está habilitado
                     setIdVideoActual(idAleatorio)
                     break
                 } 
             }
         }
 
-        if (play && vid) { // Parece que no hace nada, pero me aseguro de que el video continúe en pausa o en play, tal como estaba antes de que se cambie el video
+        if (play && vid) { // Parece que no hace nada, pero se asegura de que el video continúe en pausa o en play, tal como estaba antes de que se cambie el video
             vid.play()
         }
 
@@ -210,7 +207,7 @@ const ContenedorVideo = () => {
         let arrayMezclado: any[]
         let contadorDeVideosElegidos = 0
         Object.keys(videosElegidos).forEach(id => { // Esto lo hago para que no intente cambiar de video si no hay más de un video con el input check activado
-            if (videosElegidos[`${id}`]) contadorDeVideosElegidos+=1
+            if (videosElegidos[id]) contadorDeVideosElegidos+=1
         })
 
         while (true) {
@@ -320,8 +317,10 @@ const ContenedorVideo = () => {
         return icon
     })
 
+    const chequearTamaño = () => innerWidth < 768
+
     const mouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!cartelTiempo || innerWidth < 768) return undefined
+        if (!cartelTiempo || chequearTamaño()) return undefined        
         
         const x = e.clientX
         const y = e.clientY
@@ -346,7 +345,7 @@ const ContenedorVideo = () => {
     
                 <div ref={containerRef} onClick={ clickBarra } onMouseMove={ mouseMove } onMouseEnter={ () => setClaseTimeTooltip("scale-1 opacity-1") } onMouseLeave={ () => setClaseTimeTooltip("scale-0 opacity-0") } className="relative barraGris bg-gray-300 h-[10px] w-full border-l-2 border-r-2">
                     <div className="barraCargando bg-red-600 rounded-br-sm rounded-tr-sm h-full w-0"></div>
-                    <p id="cartelTiempo" className={`fixed font-semibold ${claseTimeTooltip}`}>{timeTooltip}</p>
+                    <p id="cartelTiempo" className={`fixed font-semibold ${claseTimeTooltip} ${chequearTamaño() && "opacity-0"}`}>{timeTooltip}</p>
                 </div>
     
                 <div className="botones h-[30px] flex justify-evenly w-full items-center border-2 border-t-0 rounded-br-sm rounded-bl-sm">

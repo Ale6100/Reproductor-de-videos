@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { PersonalContext } from './PersonalContext';
+import { ObjVideosElegidos } from '../types';
 
 const ContenedorLista = () => {
     const [ montado, setMontado ] = useState(false)
@@ -24,14 +25,14 @@ const ContenedorLista = () => {
     }
 
     const marcarTodo = () => {
-        const obj: { [key: string]: boolean } = {}
-        videos.forEach(vid => obj[`${vid.id}`] = true)
+        const obj: ObjVideosElegidos = {}
+        videos.forEach(vid => obj[vid.id] = true)
         setVideosElegidos(obj)
     }
 
     const desMarcarTodo = () => {
-        const obj: { [key: string]: boolean } = {}
-        videos.forEach(vid => obj[`${vid.id}`] = false)
+        const obj: ObjVideosElegidos = {}
+        videos.forEach(vid => obj[vid.id] = false)
         setVideosElegidos(obj)
     }
 

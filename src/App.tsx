@@ -1,4 +1,3 @@
-import './App.css'
 import PersonalContextProvider from './components/PersonalContext'
 import ContenedorVideo from './components/ContenedorVideo'
 import ContenedorLista from './components/ContenedorLista'

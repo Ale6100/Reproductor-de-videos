@@ -37,13 +37,19 @@ const Icons = ({ icon, showTooltips, setShowTooltips, velocidades, indiceVel, se
     }
 
     const onInputVol = (e: React.FormEvent<HTMLInputElement>) => {
-        const formTarget = e.target as HTMLFormElement;
-        setVol(formTarget.value/100)
+        const formTarget = e.target
+        if (formTarget instanceof HTMLInputElement) {
+            const inputValue = parseFloat(formTarget.value); // Convierte el valor a número
+            setVol(inputValue / 100);
+        }
     }
+    
 
     const onInputVel = (e: React.FormEvent<HTMLInputElement>) => {
-        const formTarget = e.target as HTMLFormElement;
-        setIndiceVel(velocidades.indexOf(parseFloat(formTarget.value)))
+        const formTarget = e.target;
+        if (formTarget instanceof HTMLInputElement) {
+            setIndiceVel(velocidades.indexOf(parseFloat(formTarget.value)))
+        }
     }
 
     return (

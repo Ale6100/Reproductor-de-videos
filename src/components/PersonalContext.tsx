@@ -1,14 +1,15 @@
 import { createContext, useState } from "react";
 import { comprobarPermanencia } from "../utils/utils.js";
 import listaVideosOriginal from "../utils/listaVideosOriginal.js";
+import { ObjVideosElegidos, ElementoArrayVideo } from "../types.js";
 
 interface PersonalContextValue {
-    videos: any[],
-    setVideos: React.Dispatch<React.SetStateAction<any[]>>,
+    videos: ElementoArrayVideo[],
+    setVideos: React.Dispatch<React.SetStateAction<ElementoArrayVideo[]>>,
     idVideoActual: number,
     setIdVideoActual: React.Dispatch<React.SetStateAction<number>>,
-    videosElegidos: { [key: string]: boolean },
-    setVideosElegidos: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>
+    videosElegidos: ObjVideosElegidos,
+    setVideosElegidos: React.Dispatch<React.SetStateAction<ObjVideosElegidos>>
 }
 
 export const PersonalContext = createContext<PersonalContextValue | undefined>(undefined);
@@ -18,7 +19,7 @@ interface PersonalContextProviderProps {
 }
 
 const PersonalContextProvider = ({ children }: PersonalContextProviderProps) => {
-    const [ videos, setVideos ] = useState(() => { // Orden de videos
+    const [ videos, setVideos ] = useState(() => { // Videos activos en el orden que se van a reproducir
         const item = localStorage.getItem("videos")
         if (item) { // Me aseguro de que la lista esté actualizada en el localstorage (ya que el localstorage debe darse cuenta si en el array "listaVideosOriginal" se agregaron o quitaron canciones entre un deploy y otro)
             const listaLocalStorage = JSON.parse(item)
@@ -27,7 +28,7 @@ const PersonalContextProvider = ({ children }: PersonalContextProviderProps) => 
         return listaVideosOriginal
     })
 
-    const [ idVideoActual, setIdVideoActual ] = useState(() => { // Id del video que se va a reproducir
+    const [ idVideoActual, setIdVideoActual ] = useState<number>(() => { // Id del video que se va a reproducir
         const item = localStorage.getItem("idVideoActual")
         if (item) { // Me aseguro de que la lista esté actualizada en el localstorage (ya que el localstorage debe darse cuenta si en el array "listaVideosOriginal" se agregaron o quitaron canciones entre un deploy y otro)
             const id = JSON.parse(item)
@@ -36,11 +37,11 @@ const PersonalContextProvider = ({ children }: PersonalContextProviderProps) => 
         return videos[0].id
     })
 
-    const [ videosElegidos, setVideosElegidos ] = useState(() => { // Objeto cuyas claves son los IDs de los videos, y los valores booleanos representan si pertenecen o no a la lista de canciones que se reproducen
+    const [ videosElegidos, setVideosElegidos ] = useState<ObjVideosElegidos>(() => { // Objeto cuyas claves son los IDs de los videos, y los valores booleanos representan si pertenecen o no a la lista de canciones habilitadas para reproducirse
         const item = localStorage.getItem("videosElegidos")
         if (item) return JSON.parse(item)
-        const obj: { [key: string]: boolean } = {};
-        videos.forEach(vid => obj[`${vid.id}`] = true)
+        const obj: ObjVideosElegidos = {};
+        videos.forEach(vid => obj[vid.id] = true)
         return obj
     })
 

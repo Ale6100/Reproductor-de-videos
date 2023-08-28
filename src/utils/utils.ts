@@ -1,3 +1,4 @@
+import { ElementoArrayVideo } from "../types.js"
 import { arraysIgualesOrdenIndistinto } from "./adHoc.js"
 
 // Recibe tres números. El tercero es opcional pero debe ser positivo. Devuelve un array de números equiespaciados desde el origen hasta el final (sin incluir) solicitado, considerando el espaciado especificado
@@ -11,13 +12,13 @@ const arange = (origen: number, final: number, espaciado: number = 1) => {
     return array
 }
 
-// Recibe un "arrayNuevo" y un "arrayViejo". Devuelve un "arrayResultante" tal que tenga los mismos elementos que arrayNuevo pero en el orden que están en arrayViejo. Por otro lado los elementos de arrayNuevo que no estén en arrayViejo se colocan al final de arrayResultante, mientras que los elementos de arrayViejo que no están en arrayNuevo se ignoran
-const comprobarPermanencia = (arrayNuevo: any[], arrayViejo: any[]) => {
+// Recibe un "arrayNuevo" y un "arrayViejo". Devuelve un "arrayResultante" tal que tenga los mismos elementos de arrayNuevo pero en el orden que están en arrayViejo. Por otro lado los elementos de arrayNuevo que no estén en arrayViejo se colocan al final de arrayResultante, mientras que los elementos de arrayViejo que no están en arrayNuevo se ignoran
+const comprobarPermanencia = (arrayNuevo: ElementoArrayVideo[], arrayViejo: ElementoArrayVideo[]) => {
     if (!Array.isArray(arrayNuevo) || !Array.isArray(arrayViejo)) throw new TypeError(`comprobarPermanencia debe recibir dos arrays. Se ha recibido ${JSON.stringify(arrayNuevo)} (${typeof arrayNuevo}) y ${JSON.stringify(arrayViejo)} (${typeof arrayViejo})`)
 
     if (arraysIgualesOrdenIndistinto(arrayNuevo, arrayViejo)) return arrayViejo
 
-    let arrayResultante: any[] = []
+    let arrayResultante: ElementoArrayVideo[] = []
 
     arrayViejo.forEach(elemento => { // Agrega los elementos del array viejo en el array resultante, siempre y cuando estén en el nuevo
         if (arrayNuevo.includes(elemento)) arrayResultante.push(elemento)
@@ -29,7 +30,7 @@ const comprobarPermanencia = (arrayNuevo: any[], arrayViejo: any[]) => {
     return arrayResultante
 }
 
-const superIndexOf = (array: number[], element: number, n: number) => {
+const superIndexOf = (array: number[], element: number, n: number) => { // Es como el indexOf tradicional, pero en lugar de encontrar la primera ocurrencia, encuentra la n-ésima. Es necesario que esta exista
     const cantVecesN = array.reduce((prev, act) => {
         if (act === element) {
             return prev + 1;
@@ -85,7 +86,7 @@ const actualizarVolumenSegunFlechasVerticales = (tecla: string, vol: number, set
     }
 }
 
-const conversion = (segundos: number): string => {
+const conversion = (segundos: number): `${string}:${string}:${string}` => {
     if (isNaN(segundos)) return '00:00:00';
     let minutos: number = Math.floor(segundos / 60);
     let horas: number = Math.floor(segundos / 3600);

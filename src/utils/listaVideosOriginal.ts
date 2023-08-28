@@ -1,4 +1,4 @@
-// Array con los nombres de los videos junto con su extensión
+// Array con los nombres de los videos junto con su extensión. Es importante que haya por lo menos uno
 const listaVideosOriginal = [
     {
         nombre: "Abba - Dancing Queen.mp4",
@@ -103,7 +103,25 @@ const listaVideosOriginal = [
     {
         nombre: "Pharrell Williams - Happy.mp4", 
         id: 26
+    },
+    {
+        nombre: "Grand Escape - Radwimps.mp4",
+        id: 27
+    },
+    {
+        nombre: "Highway to Hell - ACDC.mp4",
+        id: 28
+    },
+    {
+        nombre: "Heartless - Feeling Every Sunset.mp4",
+        id: 29
+    },
+    {
+        nombre: "Man Or Muppet - Jason Segel.mp4",
+        id: 30
     }
 ]
+
+if (listaVideosOriginal.length === 0) throw new Error("Lista de videos vacía")
 
 export default listaVideosOriginal

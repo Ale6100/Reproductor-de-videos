@@ -20,13 +20,17 @@ Necesitas tener previamente descargado e instalado [NodeJs](https://nodejs.org/)
 
 Instala las dependencias con el comando
 
-```npm install```
+```
+npm install
+```
 
 ## Despliegue 📦
 
 Corre el proyecto con el comando
 
-```npm run dev```
+```
+npm run dev
+```
 
 ## Construido con 🛠️
 
@@ -39,7 +43,7 @@ Corre el proyecto con el comando
 * [Framer Motion](https://www.framer.com/motion/)
 * [Lodash](https://lodash.com/)
 
-## Autores ✒️
+## Autor ✒️
 
 * **Alejandro Portaluppi** - [LinkedIn](https://www.linkedin.com/in/alejandro-portaluppi/)
 
