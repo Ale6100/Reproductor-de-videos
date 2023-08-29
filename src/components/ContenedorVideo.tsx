@@ -339,7 +339,7 @@ const ContenedorVideo = () => {
     return (
         <section tabIndex={0} onKeyDown={ keydown } className='h-full w-2/3 max-md:h-auto max-md:w-full outline-0'>
             <div className=" flex flex-col justify-center items-center h-full">
-                <div className="w-full border-l-2 border-r-2 border-t-2 div-video">
+                <div className="w-full border-l-2 border-r-2 border-t-2 div-video bg-black bg-opacity-80">
                     <video onClick={ () => setPlay(!play) } onEnded={ () => cambiar("siguiente") } onLoadedData={ actualizar } onTimeUpdate={ actualizar } className='h-full w-full'></video>
                 </div>
     
@@ -348,7 +348,7 @@ const ContenedorVideo = () => {
                     <p id="cartelTiempo" className={`fixed font-semibold ${claseTimeTooltip} ${chequearTamaño() && "opacity-0"}`}>{timeTooltip}</p>
                 </div>
     
-                <div className="botones h-[30px] flex justify-evenly w-full items-center border-2 border-t-0 rounded-br-sm rounded-bl-sm">
+                <div className="botones h-[30px] flex justify-evenly w-full items-center border-2 border-t-0 rounded-br-sm rounded-bl-sm bg-black bg-opacity-80">
                     { 
                         arrayDetallesIconos.map((icon) => (
                             <Icons {...{icon, showTooltips, setShowTooltips, velocidades, indiceVel, setIndiceVel, vol, setVol}} key={icon?.type}/>

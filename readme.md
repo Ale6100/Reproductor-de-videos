@@ -32,6 +32,8 @@ Corre el proyecto con el comando
 npm run dev
 ```
 
+Los videos que desees integrar deben estar en la carpeta [public/videos](public/videos), y cada uno debe estar registrado en el array de videos del archivo [src/utils/listaVideosOriginal.ts](src/utils/listaVideosOriginal.ts).
+
 ## Construido con 🛠️
 
 * CSS

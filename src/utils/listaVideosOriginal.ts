@@ -119,6 +119,18 @@ const listaVideosOriginal = [
     {
         nombre: "Man Or Muppet - Jason Segel.mp4",
         id: 30
+    },
+    {
+        nombre: "John Farnham - You're The Voice.mp4",
+        id: 31
+    },
+    {
+        nombre: "We Are The World - Michael Jackson.mp4",
+        id: 32
+    },
+    {
+        nombre: "a-ha - Take On Me.mp4",
+        id: 33
     }
 ]
 
