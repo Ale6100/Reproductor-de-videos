@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import Icons from './Icons';
 import arrayIconos from '../utils/arrayIconos.js';
 import { PersonalContext } from './PersonalContext';
+import { ElementoArrayVideo, ObjVideosElegidos } from '../types.js';
 
 const velocidades = arange(0.5, 2.5, 0.5) // Velocidades disponibles (es necesario que el rango del array sea siempre positivo y contenga al 1)
 
@@ -12,9 +13,9 @@ const ContenedorVideo = () => {
     const [ montado, setMontado ] = useState(false)
 
     const personalContext = useContext(PersonalContext)
-    if (!personalContext) return <></>
-    const { videos, setVideos, idVideoActual, setIdVideoActual, videosElegidos } = personalContext
-    
+    // if (!personalContext) return <></>
+    const { videos, setVideos, idVideoActual, setIdVideoActual, videosElegidos } = personalContext ? personalContext : { videos: [], setVideos: () => {}, idVideoActual: 0, setIdVideoActual: () => {}, videosElegidos: {} as ObjVideosElegidos }
+
     const [ indiceVel, setIndiceVel ] = useState<number>(() => { // Indice donde está ubicada la velocidad inicial
         const item = localStorage.getItem("indiceVel")
         if (item) {
@@ -30,7 +31,7 @@ const ContenedorVideo = () => {
     })
 
     const [ currentTime, setCurrentTime ] = useState(0) // Tiempo actual del video (el estado no permanece actualizado, sólo se actualiza en momentos importantes)
-    
+
     const [ play, setPlay ] = useState(false)
     const [ mute, setMute ] = useState({ mute: false, volGuardado: vol }) // Objeto que especifica si el video está muteado, y si ese es el caso, el volumen que tenía antes de estarlo
     const [ showTooltips, setShowTooltips ] = useState<{[ket: string]: boolean}>({ play: false, anterior: false, siguiente: false, reiniciar: false, aleatorio: false, mezclar: false, volumen: false, velocidad: false, estado: false })
@@ -71,10 +72,12 @@ const ContenedorVideo = () => {
         }
 
         setMontado(true)
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => { // Cada vez que el estado del array de este useEffect cambia, se actualiza su valor en el localstorage
         if (montado) localStorage.setItem("videos", JSON.stringify(videos))
+        // eslint-disable-next-line
     }, [videos])
 
     useEffect(() => { // Mantiene actualizado el video actual
@@ -82,7 +85,7 @@ const ContenedorVideo = () => {
             localStorage.setItem("idVideoActual", JSON.stringify(isFalseNullOrUndefined(idVideoActual) ? videos[0].id : idVideoActual))
             if (!vid || !botonPlay) return
             vid.src = `./videos/${videos.find(video => video.id === idVideoActual)?.nombre}`; // Puse un ? para que TypeScript no moleste, pero no es problema ya que el find nunca será undefined
-        
+
             if (play) {
                 vid.play()
                 botonPlay.src = "/img/pause.png"
@@ -91,6 +94,7 @@ const ContenedorVideo = () => {
                 botonPlay.src = "/img/play.png"
             }
         }
+        // eslint-disable-next-line
     }, [idVideoActual]);
 
     useEffect(() => { // Mantiene actualizada la velocidad
@@ -98,6 +102,7 @@ const ContenedorVideo = () => {
             localStorage.setItem("indiceVel", JSON.stringify(isFalseNullOrUndefined(indiceVel) ? velocidades.indexOf(1) : indiceVel));
             if (vid) vid.playbackRate = velocidades[indiceVel];
         }
+        // eslint-disable-next-line
     }, [indiceVel]);
 
     useEffect(() => { // Mantiene actualizado el volumen y su ícono
@@ -118,6 +123,7 @@ const ContenedorVideo = () => {
             }
             if (vid) vid.volume = vol
         }
+        // eslint-disable-next-line
     }, [vol])
 
     useEffect(() => { // Mantiene actualizada la orden play/pause
@@ -130,6 +136,7 @@ const ContenedorVideo = () => {
                 botonPlay.src = "/img/play.png"
             }
         }
+        // eslint-disable-next-line
     }, [play]);
 
     useEffect(() => { // Mantiene actualizada la orden mute ON/OFF de acuerdo al valor mute.mute
@@ -140,12 +147,14 @@ const ContenedorVideo = () => {
                 setVol(mute.volGuardado)
             }
         }
+        // eslint-disable-next-line
     }, [mute]);
 
     useEffect(() => { // Cambia el tiempo actual del video cuando se lo pidamos
         if (montado && vid) {
             vid.currentTime = currentTime
         }
+        // eslint-disable-next-line
     }, [currentTime]);
 
     const cambiar = (destino: string) => { // Cambia el id del video actual
@@ -160,32 +169,34 @@ const ContenedorVideo = () => {
         if (contadorDeVideosElegidos <= 1) return ""
 
         let cambio = 1
-        while (true) {
+        let continue_ = true
+        while (continue_) {
             if (destino === "anterior") {
                 if (videosElegidos[tripleLista[indiceEnTripleLista-cambio]]) { // Paso a la anterior canción, siempre y cuando esté habilitada para su reproducción
                     setIdVideoActual(tripleLista[indiceEnTripleLista-cambio])
-                    break
+                    continue_ = false
                 } else {
                     cambio++
                 }
-    
+
             } else if (destino === "siguiente") {
                 if (videosElegidos[tripleLista[indiceEnTripleLista+cambio]]) {
                     setIdVideoActual(tripleLista[indiceEnTripleLista+cambio])
-                    break
+                    continue_ = false
                 } else {
                     cambio++
                 }
-            } else break
+            } else continue_ = false
         }
-        
+
+        continue_ = true
         if (destino === "aleatorio") {
-            while (true) { // Reproduce un video aleatorio
+            while (continue_) { // Reproduce un video aleatorio
                 const idAleatorio = listaIds[Math.floor(Math.random()*listaIds.length)]
                 if (idVideoActual !== idAleatorio && videosElegidos[idAleatorio]) { // Verifica que el video aleatorio no sea igual al actual, para que no se repita. Además hago que se reproduzca sólo si está habilitado
                     setIdVideoActual(idAleatorio)
-                    break
-                } 
+                    continue_ = false
+                }
             }
         }
 
@@ -204,15 +215,12 @@ const ContenedorVideo = () => {
     }
 
     const mezclarLista = () => { // Mezcla la lista de reproducción y reproduce el primer video
-        let arrayMezclado: any[]
-        let contadorDeVideosElegidos = 0
-        Object.keys(videosElegidos).forEach(id => { // Esto lo hago para que no intente cambiar de video si no hay más de un video con el input check activado
-            if (videosElegidos[id]) contadorDeVideosElegidos+=1
-        })
+        let arrayMezclado: ElementoArrayVideo[] = []
 
-        while (true) {
+        let continue_ = true
+        while (continue_) {
             arrayMezclado = mezclarArray(videos)
-            if (videosElegidos[arrayMezclado[0]?.id]) break
+            if (videosElegidos[arrayMezclado[0]?.id]) continue_ = false
         }
         setVideos(arrayMezclado)
         setIdVideoActual(arrayMezclado[0].id)
@@ -268,7 +276,7 @@ const ContenedorVideo = () => {
                 setCurrentTime(vid.duration*parseInt(tecla)*10/100)
                 if (tecla === "0") vid.currentTime = 0
             }
-            
+
         } else if (tecla === "arrowleft" || tecla === "arrowright") { // Avanza o retrocede 5 segundos según cual flecha horizontal presionaste
             if (vid) setCurrentTime(tecla === "arrowleft" ? vid.currentTime - 5 : vid.currentTime + 5)
         }
@@ -320,8 +328,8 @@ const ContenedorVideo = () => {
     const chequearTamaño = () => innerWidth < 768
 
     const mouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!cartelTiempo || chequearTamaño()) return undefined        
-        
+        if (!cartelTiempo || chequearTamaño()) return undefined
+
         const x = e.clientX
         const y = e.clientY
         cartelTiempo.style.left = `${x - 27}px` // Quiero que el tooltip persiga al mouse
@@ -342,14 +350,14 @@ const ContenedorVideo = () => {
                 <div className="w-full border-l-2 border-r-2 border-t-2 div-video bg-black bg-opacity-80">
                     <video onClick={ () => setPlay(!play) } onEnded={ () => cambiar("siguiente") } onLoadedData={ actualizar } onTimeUpdate={ actualizar } className='h-full w-full'></video>
                 </div>
-    
+
                 <div ref={containerRef} onClick={ clickBarra } onMouseMove={ mouseMove } onMouseEnter={ () => setClaseTimeTooltip("scale-1 opacity-1") } onMouseLeave={ () => setClaseTimeTooltip("scale-0 opacity-0") } className="relative barraGris bg-gray-300 h-[10px] w-full border-l-2 border-r-2">
                     <div className="barraCargando bg-red-600 rounded-br-sm rounded-tr-sm h-full w-0"></div>
                     <p id="cartelTiempo" className={`fixed font-semibold ${claseTimeTooltip} ${chequearTamaño() && "opacity-0"}`}>{timeTooltip}</p>
                 </div>
-    
+
                 <div className="botones h-[30px] flex justify-evenly w-full items-center border-2 border-t-0 rounded-br-sm rounded-bl-sm bg-black bg-opacity-80">
-                    { 
+                    {
                         arrayDetallesIconos.map((icon) => (
                             <Icons {...{icon, showTooltips, setShowTooltips, velocidades, indiceVel, setIndiceVel, vol, setVol}} key={icon?.type}/>
                         ))

@@ -7,8 +7,7 @@ const ContenedorLista = () => {
     const [ valueSearch, setValueSearch ] = useState("")
 
     const personalContext = useContext(PersonalContext)
-    if (!personalContext) return <></>
-    const { videos, idVideoActual, setIdVideoActual, videosElegidos, setVideosElegidos } = personalContext
+    const { videos, idVideoActual, setIdVideoActual, videosElegidos, setVideosElegidos } = personalContext ? personalContext : { videos: [], idVideoActual: 0, setIdVideoActual: () => {}, videosElegidos: {} as ObjVideosElegidos, setVideosElegidos: () => {} }
 
     useEffect(() => {
         setMontado(true)
@@ -16,6 +15,7 @@ const ContenedorLista = () => {
 
     useEffect(() => {
         if (montado) localStorage.setItem("videosElegidos", JSON.stringify(videosElegidos))
+        // eslint-disable-next-line
     }, [videosElegidos]);
 
     const onChangeInputCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => { // Modifica el valor de videosElegidos, para que React se de cuenta si queremos habilitar o deshabilitar una canción

@@ -18,13 +18,13 @@ const comprobarPermanencia = (arrayNuevo: ElementoArrayVideo[], arrayViejo: Elem
 
     if (arraysIgualesOrdenIndistinto(arrayNuevo, arrayViejo)) return arrayViejo
 
-    let arrayResultante: ElementoArrayVideo[] = []
+    const arrayResultante: ElementoArrayVideo[] = []
 
     arrayViejo.forEach(elemento => { // Agrega los elementos del array viejo en el array resultante, siempre y cuando estén en el nuevo
         if (arrayNuevo.includes(elemento)) arrayResultante.push(elemento)
     })
 
-    arrayNuevo.forEach(elemento => { // Los elementos restantes de arrayNuevo se colocan al final del array resultante 
+    arrayNuevo.forEach(elemento => { // Los elementos restantes de arrayNuevo se colocan al final del array resultante
         if (!arrayResultante.includes(elemento)) arrayResultante.push(elemento)
     })
     return arrayResultante
@@ -48,19 +48,18 @@ const superIndexOf = (array: number[], element: number, n: number) => { // Es co
     return index
 }
 
-const mezclarArray = (array: any[]) => {
-    if (!Array.isArray(array)) throw new TypeError(`mezclar debe recibir un array. Se ha recibido ${JSON.stringify(array)} (${typeof array})`)
+const mezclarArray = <T>(array: T[]) => {
+    const arraySplice = Array.from(array); // Necesito copiar para no modificar al original
     const arrayMezclado = []
-    let arrayCopia = array.slice();
-    while (arrayCopia.length > 0) { // Elimino un elemento al azar del array original, y al mismo tiempo lo coloco en el "array mezclado". Repito el ciclo hasta que el array original quede vacío
-        const indiceAzar = Math.floor(Math.random()*arrayCopia.length)
-        const elementoRandom = arrayCopia.splice(indiceAzar, 1)[0]
+    while (arraySplice.length > 0) { // Elimino un elemento al azar del array original, y al mismo tiempo lo coloco en el "array mezclado". Repito el ciclo hasta que el array original quede vacío
+        const indiceAzar = Math.floor(Math.random()*arraySplice.length)
+        const elementoRandom = arraySplice.splice(indiceAzar, 1)[0]
         arrayMezclado.push(elementoRandom)
     }
     return arrayMezclado
 }
 
-const isFalseNullOrUndefined = (value: any) => {
+const isFalseNullOrUndefined = <T>(value: T) => {
     return value === false || value === null || value === undefined;
 }
 
@@ -72,7 +71,7 @@ const actualizarVolumenSegunFlechasVerticales = (tecla: string, vol: number, set
         } else if (0.95 < vol && vol <= 1) {
             setVol(1)
         } else { // Esto nunca debería pasar, pero lo dejo por si es necesario
-            setVol(0.5) 
+            setVol(0.5)
         }
     } else if (tecla === "arrowdown") {
         if (0.05 <= vol && vol <= 1) {

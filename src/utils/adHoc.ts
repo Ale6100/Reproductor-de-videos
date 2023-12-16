@@ -1,7 +1,7 @@
 import isEqual from 'lodash/isEqual';
 import { ElementoArrayVideo } from "../types";
 
-// Acá están todas las funciones que no se utilizan de manera directa en los jsx, sino en el archivo utils.js
+// Acá están todas las funciones que no se utilizan de manera directa en los jsx, sino en el archivo utils.ts
 
 // Recibe dos arreglos. Devuelve true si ambos son iguales aunque tengan distinto orden, o false en caso contrario (sólo funciona para los arreglos con la estructura del array "videos")
 const arraysIgualesOrdenIndistinto = (array1: ElementoArrayVideo[], array2: ElementoArrayVideo[]) => {

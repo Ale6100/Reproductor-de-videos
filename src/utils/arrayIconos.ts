@@ -17,34 +17,34 @@ const arrayIconos: arrayIconosProps[] = [
     {
         type: "anterior",
         img: "previous.png",
-        className_: "translate-x-[-27px] translate-y-[-70px]", 
+        className_: "translate-x-[-27px] translate-y-[-70px]",
         texto: "Anterior (p)"
     },
     {
         type: "siguiente",
         img: "next.png",
-        className_: "translate-x-[-33px] translate-y-[-70px]", 
+        className_: "translate-x-[-33px] translate-y-[-70px]",
         texto: "Siguiente (n)"
     },
 
     {
         type: "reiniciar",
         img: "reload.png",
-        className_: "translate-x-[-27px] translate-y-[-70px]", 
+        className_: "translate-x-[-27px] translate-y-[-70px]",
         texto: "Reiniciar (r)"
     },
 
     {
         type: "aleatorio",
         img: "dice.png",
-        className_: "translate-x-[-30px] translate-y-[-70px]", 
+        className_: "translate-x-[-30px] translate-y-[-70px]",
         texto: "Aleatorio (a)"
     },
 
     {
         type: "mezclar",
         img: "swap.png",
-        className_: "translate-x-[-29px] translate-y-[-70px]", 
+        className_: "translate-x-[-29px] translate-y-[-70px]",
         texto: "Mezclar (o)"
     },
 
