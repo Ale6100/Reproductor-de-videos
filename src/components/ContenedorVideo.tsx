@@ -13,7 +13,6 @@ const ContenedorVideo = () => {
     const [ montado, setMontado ] = useState(false)
 
     const personalContext = useContext(PersonalContext)
-    // if (!personalContext) return <></>
     const { videos, setVideos, idVideoActual, setIdVideoActual, videosElegidos } = personalContext ? personalContext : { videos: [], setVideos: () => {}, idVideoActual: 0, setIdVideoActual: () => {}, videosElegidos: {} as ObjVideosElegidos }
 
     const [ indiceVel, setIndiceVel ] = useState<number>(() => { // Indice donde está ubicada la velocidad inicial
@@ -265,7 +264,7 @@ const ContenedorVideo = () => {
         } else if (tecla === "o") {
             mezclarLista()
 
-        } else if (tecla === "m") { // Activa o desactiva el mute 
+        } else if (tecla === "m") { // Activa o desactiva el mute
             setMute(mute.mute ? { ...mute, mute: false } : { mute: true, volGuardado: vol })
 
         } else if (tecla === "arrowup" || tecla === "arrowdown") {

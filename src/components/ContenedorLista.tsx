@@ -49,8 +49,8 @@ const ContenedorLista = () => {
                 (video.nombre.toLowerCase().includes(valueSearch.toLowerCase()) || valueSearch === "" || `${index+1}`.includes(valueSearch)) &&
 
                 <div className={`${index === videos.length-1 ? "" : "py-2"} ${video.id === idVideoActual && "bg-blue-600 bg-opacity-70"} ${videosElegidos[`${video.id}`] && "hover:bg-blue-500"} h-10 px-1 flex items-center cursor-pointer hover:font-semibold hover:scale-105 hover:translate-x-[10px] transition-all duration-100`} key={video.id}>
-                    <input onChange={ onChangeInputCheckbox } data-id={`${video.id}`} type="checkbox" checked={videosElegidos[`${video.id}`] ?? setVideosElegidos({...videosElegidos, [`${video.id}`]: true})} className="mr-1"/> {/* El ?? está hecho para que agrege el id de un video a la lista si no estaba (ya que en ese caso sería un video nuevo) */}
-                    <p onClick={ () => videosElegidos[`${video.id}`] && setIdVideoActual(video.id) } className={`${video.id === idVideoActual && "font-semibold"} ${videosElegidos[`${video.id}`] || "brightness-50"}`}>{index+1}) {video.nombre.replace(".mp4", "").replace(".mkv", "")}</p> {/* Me aseguro de que la canción no esté habilitada si el usuario no tiene activado el ckeck */}
+                    <input onChange={ onChangeInputCheckbox } data-id={`${video.id}`} type="checkbox" checked={videosElegidos[`${video.id}`] ?? setVideosElegidos({...videosElegidos, [`${video.id}`]: true})} className="mr-1 scale-125"/> {/* El ?? está hecho para que agrege el id de un video a la lista si no estaba (ya que en ese caso sería un video nuevo) */}
+                    <p onClick={ () => videosElegidos[`${video.id}`] && setIdVideoActual(video.id) } className={`${video.id === idVideoActual && "font-semibold"} ${videosElegidos[`${video.id}`] || "brightness-50"}`}>{index+1} {video.nombre.replace(".mp4", "").replace(".mkv", "")}</p> {/* Me aseguro de que la canción no esté habilitada si el usuario no tiene activado el ckeck */}
                 </div>
             ))
             }
