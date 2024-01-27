@@ -39,7 +39,7 @@ Puede ser molesto cambiar el volumen manualmente cada vez que se cambia un video
 
 Para ejecutar este archivo sigue los siguientes pasos (debes tener python instalado):
 
-1. Crea un entorno virtual con el comando
+1. Párate en la carpeta [normalize_audio](./normalize_audio) y crea un entorno virtual con el comando
 ```bash
 py -3 -m venv .venv
 ```

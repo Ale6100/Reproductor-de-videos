@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 normalize_audio/.venv
-normalzze_audio/normalized/*
+normalize_audio/normalized/*

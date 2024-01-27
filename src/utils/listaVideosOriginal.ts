@@ -1,6 +1,6 @@
 // Array con los nombres de los videos junto con su extensión. Es importante que haya por lo menos uno
 // Podría hacer esto dinámicamente, pero la idea de hacerlo manualmente es que cada uno tenga un id único y que cuando quiera borrar uno, los demás permanezcan con su id original
-const listaVideosOriginal = [
+const listaVideosOriginal: { nombre: string, id: number }[] = [
     {
         nombre: "Abba - Dancing Queen.mp4",
         id: 1
