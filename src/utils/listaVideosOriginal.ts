@@ -1,4 +1,5 @@
 // Array con los nombres de los videos junto con su extensión. Es importante que haya por lo menos uno
+// Podría hacer esto dinámicamente, pero la idea de hacerlo manualmente es que cada uno tenga un id único y que cuando quiera borrar uno, los demás permanezcan con su id original
 const listaVideosOriginal = [
     {
         nombre: "Abba - Dancing Queen.mp4",
@@ -131,6 +132,10 @@ const listaVideosOriginal = [
     {
         nombre: "a-ha - Take On Me.mp4",
         id: 33
+    },
+    {
+        nombre: "Syd Matters - To All Of You.mp4",
+        id: 34
     }
 ]
 

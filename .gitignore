@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+normalize_audio/.venv
+normalzze_audio/normalized/*

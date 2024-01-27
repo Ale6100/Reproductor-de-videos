@@ -26,7 +26,7 @@ interface iconsProps {
 
 const Icons = ({ icon, showTooltips, setShowTooltips, velocidades, indiceVel, setIndiceVel, vol, setVol }: iconsProps) => {
 
-    const hoverStar = () => { // Los Object.keys a priori no son necesarios, pero sirven para evitar bugs menores
+    const hoverStar = () => {
         Object.keys(showTooltips).forEach(key => showTooltips[key] = false);
         setShowTooltips({ ...showTooltips, [icon.type]: true })
     }
@@ -39,8 +39,7 @@ const Icons = ({ icon, showTooltips, setShowTooltips, velocidades, indiceVel, se
     const onInputVol = (e: React.FormEvent<HTMLInputElement>) => {
         const formTarget = e.target
         if (formTarget instanceof HTMLInputElement) {
-            const inputValue = parseFloat(formTarget.value); // Convierte el valor a número
-            setVol(inputValue / 100);
+            setVol(parseFloat(formTarget.value) / 100);
         }
     }
 
