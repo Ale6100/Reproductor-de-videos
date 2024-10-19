@@ -1,21 +1,30 @@
-import { createContext, useState } from "react";
+import { createContext, Dispatch, ReactNode, SetStateAction, useMemo, useState } from "react";
 import { comprobarPermanencia } from "../utils/utils.js";
 import listaVideosOriginal from "../utils/listaVideosOriginal.js";
 import { ObjVideosElegidos, ElementoArrayVideo } from "../types.js";
 
 interface PersonalContextValue {
     videos: ElementoArrayVideo[],
-    setVideos: React.Dispatch<React.SetStateAction<ElementoArrayVideo[]>>,
+    setVideos: Dispatch<SetStateAction<ElementoArrayVideo[]>>,
     idVideoActual: number,
-    setIdVideoActual: React.Dispatch<React.SetStateAction<number>>,
+    setIdVideoActual: Dispatch<SetStateAction<number>>,
     videosElegidos: ObjVideosElegidos,
-    setVideosElegidos: React.Dispatch<React.SetStateAction<ObjVideosElegidos>>
+    setVideosElegidos: Dispatch<SetStateAction<ObjVideosElegidos>>
 }
 
-export const PersonalContext = createContext<PersonalContextValue | undefined>(undefined);
+const defaultValue: PersonalContextValue = {
+    videos: [],
+    setVideos: () => {},
+    idVideoActual: 0,
+    setIdVideoActual: () => {},
+    videosElegidos: {},
+    setVideosElegidos: () => {}
+}
+
+export const PersonalContext = createContext<PersonalContextValue>(defaultValue);
 
 interface PersonalContextProviderProps {
-    children: React.ReactNode;
+    children: ReactNode;
 }
 
 const PersonalContextProvider = ({ children }: PersonalContextProviderProps) => {
@@ -45,8 +54,17 @@ const PersonalContextProvider = ({ children }: PersonalContextProviderProps) => 
         return obj
     })
 
+    const contextValue = useMemo(() => ({
+        videos,
+        setVideos,
+        idVideoActual,
+        setIdVideoActual,
+        videosElegidos,
+        setVideosElegidos
+    }), [videos, idVideoActual, videosElegidos]);
+
     return (
-        <PersonalContext.Provider value={{ videos, setVideos, idVideoActual, setIdVideoActual, videosElegidos, setVideosElegidos }}>
+        <PersonalContext.Provider value={contextValue}>
             {children}
         </PersonalContext.Provider>
     );

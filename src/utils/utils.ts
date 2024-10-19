@@ -87,12 +87,17 @@ const actualizarVolumenSegunFlechasVerticales = (tecla: string, vol: number, set
 
 const conversion = (segundos: number): `${string}:${string}:${string}` => {
     if (isNaN(segundos)) return '00:00:00';
+
     let minutos: number = Math.floor(segundos / 60);
-    let horas: number = Math.floor(segundos / 3600);
-    segundos = Math.floor((segundos / 60 - minutos) * 60);
-    if (minutos <= 9) minutos = parseInt('0' + minutos);
-    if (horas === 0) horas = parseInt('0' + horas);
-    return `${horas === 0 ? `0${horas}` : horas}:${minutos <= 9 ? `0${minutos}` : minutos}:${segundos <= 9 ? `0${segundos}` : segundos}`;
+    const horas: number = Math.floor(segundos / 3600);
+    segundos = Math.floor(segundos % 60);
+    minutos = minutos % 60;
+
+    const horasStr = horas < 10 ? `0${horas}` : `${horas}`;
+    const minutosStr = minutos < 10 ? `0${minutos}` : `${minutos}`;
+    const segundosStr = segundos < 10 ? `0${segundos}` : `${segundos}`;
+
+    return `${horasStr}:${minutosStr}:${segundosStr}`;
 }
 
 export {

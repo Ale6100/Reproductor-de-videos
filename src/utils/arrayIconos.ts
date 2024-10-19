@@ -1,4 +1,4 @@
-interface arrayIconosProps {
+interface ArrayIconosProps {
     type: string,
     img: string,
     className_: string,
@@ -7,7 +7,7 @@ interface arrayIconosProps {
     onClickImg?: () => void
 }
 
-const arrayIconos: arrayIconosProps[] = [
+const arrayIconos: ArrayIconosProps[] = [
     {
         type: "play",
         img: "play.png",

@@ -11,4 +11,4 @@ names = [f for f in os.listdir(originalFile)]
 for name in names:
     print(f"Normalizando {name}")
     os.system(f'ffmpeg-normalize "{originalFile}/{name}" -o "{outputDir}/{name}" -c:a aac -b:a 192k --keep-loudness-range-target')
-    print(f"Listo")
+    print("Listo")

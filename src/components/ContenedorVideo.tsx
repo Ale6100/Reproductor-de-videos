@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import Icons from './Icons';
 import arrayIconos from '../utils/arrayIconos.js';
 import { PersonalContext } from './PersonalContext';
-import { ElementoArrayVideo, ObjVideosElegidos } from '../types.js';
+import { ElementoArrayVideo } from '../types.js';
 
 const velocidades = arange(0.5, 2.5, 0.5) // Velocidades disponibles (es necesario que el rango del array sea siempre positivo y contenga al 1)
 
@@ -12,8 +12,7 @@ let botonVolumen: HTMLImageElement | null, vid: HTMLVideoElement | null, botonPl
 const ContenedorVideo = () => {
     const [ montado, setMontado ] = useState(false)
 
-    const personalContext = useContext(PersonalContext)
-    const { videos, setVideos, idVideoActual, setIdVideoActual, videosElegidos } = personalContext ? personalContext : { videos: [], setVideos: () => {}, idVideoActual: 0, setIdVideoActual: () => {}, videosElegidos: {} as ObjVideosElegidos }
+    const { videos, setVideos, idVideoActual, setIdVideoActual, videosElegidos } = useContext(PersonalContext)
 
     const [ indiceVel, setIndiceVel ] = useState<number>(() => { // Indice donde está ubicada la velocidad inicial
         const item = localStorage.getItem("indiceVel")
@@ -59,14 +58,12 @@ const ContenedorVideo = () => {
         if (botonVolumen) {
             if (vol === 0) { // Si tiene volumen cero, lo colocamos en mute
                 botonVolumen.src = "/img/mute.png"
+            } else if (vol < 0.33) {
+                botonVolumen.src = "/img/low-volume.png"
+            } else if (vol < 0.66) {
+                botonVolumen.src = "/img/medium-volume.png"
             } else {
-                if (vol < 0.33) {
-                    botonVolumen.src = "/img/low-volume.png"
-                } else if (vol < 0.66) {
-                    botonVolumen.src = "/img/medium-volume.png"
-                } else {
-                    botonVolumen.src = "/img/high-volume.png"
-                }
+                botonVolumen.src = "/img/high-volume.png"
             }
         }
 
@@ -110,14 +107,12 @@ const ContenedorVideo = () => {
             if (botonVolumen) {
                 if (vol === 0) { // Si tiene volumen cero, lo colocamos en mute
                     botonVolumen.src = "/img/mute.png"
+                } else if (vol < 0.33) {
+                    botonVolumen.src = "/img/low-volume.png"
+                } else if (vol < 0.66) {
+                    botonVolumen.src = "/img/medium-volume.png"
                 } else {
-                    if (vol < 0.33) {
-                        botonVolumen.src = "/img/low-volume.png"
-                    } else if (vol < 0.66) {
-                        botonVolumen.src = "/img/medium-volume.png"
-                    } else {
-                        botonVolumen.src = "/img/high-volume.png"
-                    }
+                    botonVolumen.src = "/img/high-volume.png"
                 }
             }
             if (vid) vid.volume = vol
@@ -344,7 +339,7 @@ const ContenedorVideo = () => {
     }
 
     return (
-        <section tabIndex={0} onKeyDown={ keydown } className='h-full w-2/3 max-md:h-auto max-md:w-full outline-0'>
+        <section onKeyDown={ keydown } className='h-full w-2/3 max-md:h-auto max-md:w-full outline-0'>
             <div className=" flex flex-col justify-center items-center h-full">
                 <div className="w-full border-l-2 border-r-2 border-t-2 div-video bg-black bg-opacity-80">
                     <video onClick={ () => setPlay(!play) } onEnded={ () => cambiar("siguiente") } onLoadedData={ actualizar } onTimeUpdate={ actualizar } className='h-full w-full'></video>
