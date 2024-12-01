@@ -73,8 +73,7 @@ const ContenedorVideo = () => {
 
     useEffect(() => { // Cada vez que el estado del array de este useEffect cambia, se actualiza su valor en el localstorage
         if (montado) localStorage.setItem("videos", JSON.stringify(videos))
-        // eslint-disable-next-line
-    }, [videos])
+    }, [videos, montado])
 
     useEffect(() => { // Mantiene actualizado el video actual
         if (montado) {

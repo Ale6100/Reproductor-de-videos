@@ -9,7 +9,7 @@ function App() {
                 <ContenedorVideo />
                 <ContenedorLista />
             </main>
-            <a className='fixed top-[1vw] left-[1vw] hover:font-semibold text-sm max-md:text-xs hover:scale-105 hover:translate-x-[0.25vw] transition-all duration-100' href="https://www.linkedin.com/in/alejandro-portaluppi/" target="_blank">Desarrollado por Alejandro P</a>
+            <a className='fixed top-[1vw] left-[1vw] hover:font-semibold text-sm max-md:text-xs hover:scale-105 hover:translate-x-[0.25vw] transition-all duration-100' href="https://www.linkedin.com/in/alejandro-portaluppi/" target="_blank" rel='noopener'>Desarrollado por Alejandro P</a>
         </PersonalContextProvider>
     )
 }

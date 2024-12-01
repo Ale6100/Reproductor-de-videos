@@ -17,8 +17,7 @@ const ContenedorLista = () => {
 
     useEffect(() => {
         if (montado) localStorage.setItem("videosElegidos", JSON.stringify(videosElegidos))
-        // eslint-disable-next-line
-    }, [videosElegidos]);
+    }, [videosElegidos, montado]);
 
     const onChangeInputCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => { // Modifica el valor de videosElegidos, para que React se de cuenta si queremos habilitar o deshabilitar una canción
         setVideosElegidos({...videosElegidos, [`${e.target.dataset.id}`]: e.target.checked})
@@ -51,9 +50,9 @@ const ContenedorLista = () => {
             videos.map((video, index) => (
                 (video.nombre.toLowerCase().includes(valueSearch.toLowerCase()) || valueSearch === "" || `${index+1}`.includes(valueSearch)) &&
 
-                <div className={[index !== videos.length - 1 ? "py-2" : "", video.id === idVideoActual ? "bg-blue-600 bg-opacity-70" : "", videosElegidos[video.id] ? "hover:bg-blue-500" : "", "h-10 px-1 flex items-center cursor-pointer hover:font-semibold hover:scale-105 hover:translate-x-[10px] transition-all duration-100"].filter(Boolean).join(" ")} key={video.id}>
-                    <input onChange={ onChangeInputCheckbox } data-id={`${video.id}`} type="checkbox" checked={videosElegidos[`${video.id}`] ?? setVideosElegidos({...videosElegidos, [`${video.id}`]: true})} className="mr-1 scale-125"/> {/* El ?? está hecho para que agrege el id de un video a la lista si no estaba (ya que en ese caso sería un video nuevo) */}
-                    <p onClick={ () => videosElegidos[`${video.id}`] && setIdVideoActual(video.id) } className={`${video.id === idVideoActual && "font-semibold"} ${videosElegidos[`${video.id}`] || "brightness-50"}`}>{index+1} {video.nombre.replace(".mp4", "").replace(".mkv", "")}</p> {/* Me aseguro de que la canción no esté habilitada si el usuario no tiene activado el ckeck */}
+                <div className={[index !== videos.length - 1 ? "py-6" : "", video.id === idVideoActual ? "bg-blue-600 bg-opacity-70" : "", videosElegidos[video.id] ? "hover:bg-blue-500" : "", "h-10 px-1 flex items-center cursor-pointer hover:font-semibold hover:scale-105 hover:translate-x-[10px] transition-all duration-100"].filter(Boolean).join(" ")} key={video.id}>
+                    <input title='Habilitar/deshabilitar' onChange={ onChangeInputCheckbox } data-id={`${video.id}`} type="checkbox" checked={videosElegidos[`${video.id}`] ?? setVideosElegidos({...videosElegidos, [`${video.id}`]: true})} className="mr-1 scale-125"/> {/* El ?? está hecho para que agrege el id de un video a la lista si no estaba (ya que en ese caso sería un video nuevo) */}
+                    <button type='button' title='Reproducir' onClick={ () => videosElegidos[`${video.id}`] && setIdVideoActual(video.id) } className={`whitespace-normal text-start ${video.id === idVideoActual ? "font-semibold" : ""} ${videosElegidos[video.id.toString()] ? "" : "brightness-50"}`}>{index+1} {video.nombre.replace(".mp4", "").replace(".mkv", "")}</button>
                 </div>
             ))
             }

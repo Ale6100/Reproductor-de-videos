@@ -136,6 +136,10 @@ const listaVideosOriginal: { nombre: string, id: number }[] = [
     {
         nombre: "Syd Matters - To All Of You.mp4",
         id: 34
+    },
+    {
+        nombre: 'Stromae & Pomme - Ma Meilleure Ennemie.mp4',
+        id: 35
     }
 ]
 
