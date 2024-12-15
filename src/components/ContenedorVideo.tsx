@@ -338,7 +338,7 @@ const ContenedorVideo = () => {
     }
 
     return (
-        <section onKeyDown={ keydown } className='h-full w-2/3 max-md:h-auto max-md:w-full outline-0'>
+        <section tabIndex={0} onKeyDown={ keydown } className='h-full w-2/3 max-md:h-auto max-md:w-full outline-0'> {/* El tabIndex es necesario para que el evento keydown funcione */}
             <div className=" flex flex-col justify-center items-center h-full">
                 <div className="w-full border-l-2 border-r-2 border-t-2 div-video bg-black bg-opacity-80">
                     <video onClick={ () => setPlay(!play) } onEnded={ () => cambiar("siguiente") } onLoadedData={ actualizar } onTimeUpdate={ actualizar } className='h-full w-full'></video>

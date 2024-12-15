@@ -10,7 +10,7 @@ interface ArrayIconosProps {
 }
 
 interface ShowTooltipsProps {
-    [ket: string]: boolean
+    [key: string]: boolean
 }
 
 interface IconsProps {
@@ -73,7 +73,7 @@ const Icons = ({ icon, showTooltips, setShowTooltips, velocidades, indiceVel, se
 
     return (
         <motion.div onClick={ icon.onClick } className='relative cursor-pointer select-none' onHoverStart={ hoverStar } onHoverEnd={ hoverEnd }>
-            <img title='' onClick={icon.onClickImg} className={icon.type} src={`/img/${icon.img}`} />
+            <img title={icon.texto} onClick={icon.onClickImg} className={icon.type} src={`/img/${icon.img}`} />
 
             { showTooltips[icon.type] && (
                 <motion.div className={`fixed p-1 ${icon.className_}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>

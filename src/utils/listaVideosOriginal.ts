@@ -97,10 +97,10 @@ const listaVideosOriginal: { nombre: string, id: number }[] = [
         nombre: "ZAZ - Je veux.mp4",
         id: 24
     },
-    {
-        nombre: "Taylor Swift - Crazier.mp4",
-        id: 25
-    },
+    // {
+    //     nombre: "Taylor Swift - Crazier.mp4",
+    //     id: 25
+    // },
     {
         nombre: "Pharrell Williams - Happy.mp4",
         id: 26
